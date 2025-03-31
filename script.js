@@ -2,7 +2,7 @@ function validatePassword() {
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('error-message');
     const predictionContent = document.getElementById('prediction-content');
-    const correctPassword = 'empire0579';
+    const correctPassword = '88616';
 
     if (password === correctPassword) {
         errorMessage.textContent = '';
