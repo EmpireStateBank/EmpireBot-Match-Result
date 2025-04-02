@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Tips</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%; /* Increased width to 100% */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Hide the container initially */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            display: inline;
+            font-size: 24px;
+            margin: 0;
+        }
+        .fixture {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .fixture div {
+            width: 20%;
+            text-align: center;
+        }
+        .fixture:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        .fixture:nth-child(even) {
+            background-color: #e9e9e9;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="pinPrompt">
+        <label for="pinInput">Enter PIN:</label>
+        <input type="password" id="pinInput" maxlength="4" pattern="\d{4}" title="4 digit PIN" required>
+        <button onclick="checkPin()">Submit</button>
+    </div>
+    <div class="container" id="content1">
+        <div class="header">
+            <h1>England: Premier League</h1>
+        </div>
+        <div class="fixture">
+            <div>DATE</div>
+            <div>TIME</div>
+            <div>HOME</div>
+            <div>AWAY</div>
+            <div>TIP</div>
+        </div>
+        <div class="fixture">
+            <div>2025-04-02</div>
+            <div>14:15</div>
+            <div>Team A</div>
+            <div>Team B</div>
+            <div>OV2.5</div>
+        </div>
+        <div class="fixture">
+            <div>2025-04-02</div>
+            <div>14:15</div>
+            <div>ARSENAL</div>
+            <div>PSG</div>
+            <div>1-1</div>
+        </div>
+    </div>
+    <div class="container" id="content2">
+        <div class="header">
+            <h1>Spain: Laliga</h1>
+        </div>
+        <div class="fixture">
+            <div>DATE</div>
+            <div>TIME</div>
+            <div>HOME</div>
+            <div>AWAY</div>
+            <div>TIP</div>
+        </div>
+        <div class="fixture">
+            <div>2025-04-02</div>
+            <div>20:25</div>
+            <div>Celtavigo</div>
+            <div>AC Milan</div>
+            <div>0-3</div>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2025 Soccer Tips. All rights reserved.
+    </div>
+    <script>
+        const correctPin = "1404"; // Set your PIN here
+
+        function checkPin() {
+            const pin = document.getElementById("pinInput").value;
+            if (pin === correctPin) {
+                document.getElementById("pinPrompt").style.display = "none";
+                const containers = document.getElementsByClassName("container");
+                for (let i = 0; i < containers.length; i++) {
+                    containers[i].style.display = "block";
+                }
+            } else {
+                alert("Incorrect PIN. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
