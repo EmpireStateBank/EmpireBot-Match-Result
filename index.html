@@ -66,16 +66,15 @@
             color: #555555;
         }
         .intro-image {
-            max-width: 50%; /* Reduced the image size */
+            max-width: 50%;
             height: auto;
             display: block;
-            margin: 0 auto 10px; /* Added margin to separate image from text */
+            margin: 0 auto 10px;
         }
     </style>
 </head>
 <body>
     <header>
-        <!-- Add the image here -->
         <img src="-5890865169557472356_109.jpg" alt="Intro Image" class="intro-image">
         <h1>EmpireBet</h1>
         <p>Past Predicted Match Results</p>
@@ -90,12 +89,43 @@
             <p><strong>Teams:</strong> Radnicki 1923 vs FK Crvera Zvezla</p>
             <p><strong>Tip:</strong> Over 2.5</p>
             <!-- Dynamically update the class below to "won", "loss", or "pending" -->
-            <div class="status pending">won</div>
+            <div id="status" class="status pending">won</div>
         </div>
     </div>
 
     <div class="footer">
         <p>&copy; 2025 EmpireBet. All Rights Reserved.</p>
     </div>
+
+    <script>
+        /**
+         * Function to update the status dynamically.
+         * @param {string} newStatus - The new status to apply ("won", "loss", "pending").
+         */
+        function updateStatus(newStatus) {
+            const statusDiv = document.getElementById('status');
+            
+            // Remove all status classes
+            statusDiv.classList.remove('won', 'loss', 'pending');
+            
+            // Add the new status class
+            statusDiv.classList.add(newStatus);
+            
+            // Update the text based on the new status
+            if (newStatus === 'won') {
+                statusDiv.textContent = 'Won';
+            } else if (newStatus === 'loss') {
+                statusDiv.textContent = 'Loss';
+            } else if (newStatus === 'pending') {
+                statusDiv.textContent = 'Pending';
+            }
+        }
+
+        // Example usage:
+        // Call the function below to change the status as needed
+        // updateStatus('won');
+        // updateStatus('loss');
+        // updateStatus('pending');
+    </script>
 </body>
 </html>
