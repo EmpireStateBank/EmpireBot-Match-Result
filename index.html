@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>Soccer Tips</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eae9e9;
+            color: #2c2c2c;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1a73e8;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            margin: auto;
+            max-width: 800px;
+        }
+        .tip {
+            background: #ffffff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .tip h3 {
+            margin: 0;
+            color: #1a73e8;
+        }
+        .tip p {
+            margin: 5px 0;
+        }
+        .status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .status.won {
+            background-color: #28a745;
+        }
+        .status.loss {
+            background-color: #dc3545;
+        }
+        .status.pending {
+            background-color: #ffc107;
+            color: #000000;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            color: #555555;
+        }
+        /* Modal Styles */
+        .modal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .modal.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal Section -->
+    <div id="image-modal" class="modal">
+        <img src="path-to-your-image.jpg" alt="Big Image">
+    </div>
+
+    <header>
+        <img src="AddText_04-28-11.29.59.png" alt="Intro Image" class="intro-image">
+        <h1>EmpireBet</h1>
+        <p>LAST VIP TICKET WON</p>
+    </header>
+
+    <div class="container">
+        <!-- Example Tip -->
+        <div class="tip">
+            <h3>Country: Serbia</h3>
+            <p><strong>League: Super Liga</strong> </p>
+            <p><strong>Match Date & Time:</strong> 2025-04-23 18:00</p>
+            <p><strong>Teams:</strong> Radnicki 1923 vs FK Crvera Zvezla</p>
+            <p><strong>Tip:</strong> Over 2.5</p>
+            <!-- Dynamically update the class below to "won", "loss", or "pending" -->
+            <div id="status" class="status won">Won</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 EmpireBet. All Rights Reserved.</p>
+    </div>
+
+    <script>
+        // JavaScript to manage modal display
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById('image-modal');
+            modal.addEventListener('click', function () {
+                modal.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
