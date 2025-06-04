@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            background: #111;
+            background: #000; /* Changed to pure black */
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -112,6 +112,9 @@
             text-align: center;
             font-weight: 600;
         }
+        .possibility.green { background: #2ecc40 !important; color: #fff !important; }
+        .possibility.yellow { background: #ffd700 !important; color: #222 !important; }
+        .possibility.red { background: #e74c3c !important; color: #fff !important; }
         .possibility.home { background: #0a3773; color: #ffd700; }
         .possibility.draw { background: #434343; color: #00c3ff; }
         .possibility.away { background: #6d081b; color: #ffd700; }
@@ -121,7 +124,12 @@
         }
         .empty-space {
             height: 80px;
-            /* You can adjust this height or add your own style for the empty space */
+        }
+        .team-label {
+            font-size: 0.98rem;
+            color: #ffd700;
+            margin-bottom: 2px;
+            font-weight: bold;
         }
         @media (max-width: 600px) {
             .fixture-container {
@@ -151,11 +159,13 @@
         <div class="fixture-time">Friday, June 5, 2025 &bull; 08:00 AM</div>
         <div class="teams-row">
             <div class="team">
+                <div class="team-label">Home</div>
                 <img src="teamA.jpg" alt="Team A">
                 <div class="team-name">Divine God's Mercy Academy</div>
             </div>
             <div class="vs">VS</div>
             <div class="team">
+                <div class="team-label">Away</div>
                 <img src="AddText_06-04-01.09.17.png" alt="Team B">
                 <div class="team-name">The Rock FC</div>
             </div>
@@ -167,7 +177,7 @@
             <div class="match-possibility-title">
                 Match Possibility
             </div>
-            <div class="match-possibility-bar">
+            <div class="match-possibility-bar" id="possibility-bar">
                 <div class="possibility home">Home 70%</div>
                 <div class="possibility draw">Draw 25%</div>
                 <div class="possibility away">Away 15%</div>
@@ -180,5 +190,32 @@
         <div class="empty-space"></div>
 
     </div>
+    <script>
+    // Dynamically assign colors based on percentages
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all possibility elements
+        const bar = document.getElementById('possibility-bar');
+        if (bar) {
+            const items = Array.from(bar.children);
+            // Extract percentages and store with nodes
+            const percentages = items.map(item => {
+                const match = item.textContent.match(/(\d+)%/);
+                return match ? parseInt(match[1]) : 0;
+            });
+            // Make a sorted copy descending, find mapping
+            const sorted = [...percentages].sort((a, b) => b - a);
+            items.forEach((item, idx) => {
+                item.classList.remove('green', 'yellow', 'red');
+                if (percentages[idx] === sorted[0]) {
+                    item.classList.add('green');
+                } else if (percentages[idx] === sorted[1]) {
+                    item.classList.add('yellow');
+                } else {
+                    item.classList.add('red');
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>
