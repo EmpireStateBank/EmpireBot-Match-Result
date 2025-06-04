@@ -2,117 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Football Fixture</title>
+    <title>Football Fixtures</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             background: #111;
             color: #fff;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
+            padding: 0;
             min-height: 100vh;
         }
         .fixture-container {
-            max-width: 800px;
-            margin: 40px auto;
-            background: #222;
-            border-radius: 16px;
-            padding: 32px 24px 48px 24px;
-            box-shadow: 0 6px 32px rgba(0,0,0,0.4);
+            max-width: 600px;
+            margin: 48px auto 0 auto;
+            background: #181818;
+            border-radius: 14px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+            padding: 32px 18px 48px 18px;
         }
         .fixture-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 9px;
             text-align: center;
-            font-size: 2.1rem;
-            font-weight: bold;
-            letter-spacing: 1.5px;
             color: #ffd700;
-            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
         .fixture-time {
             text-align: center;
-            color: #00c3ff;
-            font-size: 1.1rem;
             margin-bottom: 28px;
+            font-size: 1.1rem;
+            color: #00c3ff;
         }
         .teams-row {
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            margin: 0 0 24px 0;
+            gap: 48px;
+            margin-bottom: 22px;
         }
         .team {
-            flex: 1 1 0;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .team img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
+            width: 92px;
+            height: 92px;
             border-radius: 50%;
-            border: 4px solid #00c3ff;
-            background: #fff;
-            margin-bottom: 12px;
-            box-shadow: 0 0 16px #00c3ff44;
+            object-fit: cover;
+            border: 3px solid #222;
+            background: #272727;
+            margin-bottom: 7px;
         }
         .team-name {
-            margin-top: 3px;
-            font-size: 1.15rem;
+            font-size: 1.12rem;
             font-weight: 600;
-            color: #ffd700;
+            color: #fff;
             text-align: center;
-            letter-spacing: 1px;
+            margin-top: 2px;
+            max-width: 130px;
         }
         .vs {
-            flex: 0 0 90px;
+            font-size: 2.4rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 0 18px;
+            background: #000;
+            border-radius: 50%;
+            width: 74px;
+            height: 74px;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 110px;
-            border-radius: 50%;
-            background: #262626;
-            border: 3px solid #ff5e62;
-            font-size: 2.6rem;
-            font-weight: bold;
-            color: #ff5e62;
-            text-shadow: 1px 1px 12px #000, 0 0 8px #ff5e6233;
-            box-shadow: 0 0 16px #ff5e6233;
-            margin: 0 15px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.3) inset;
+            border: 2px solid #ffd700;
         }
         .match-info {
-            margin: 24px auto 0 auto;
-            background: #191919;
-            border-radius: 10px;
-            padding: 18px 18px 10px 18px;
-            max-width: 440px;
-            box-shadow: 0 2px 12px #00000055;
+            margin-top: 18px;
         }
         .match-venue {
-            font-size: 1.08rem;
-            margin-bottom: 10px;
-            color: #00fa9a;
             text-align: center;
-            font-weight: 500;
+            font-size: 1.04rem;
+            font-weight: 600;
+            color: #63e6be; /* Teal green */
+            margin-bottom: 10px;
+            background: #23272e;
+            padding: 6px 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         }
         .match-possibility-title {
             text-align: center;
-            color: #ffd700;
-            font-size: 1.04rem;
             font-weight: 600;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
+            color: #00c3ff;
+            margin-bottom: 8px;
         }
         .match-possibility-bar {
             display: flex;
             justify-content: center;
-            gap: 9px;
-            margin-top: 3px;
+            gap: 16px;
+            margin-top: 7px;
         }
         .possibility {
-            flex: 1 1 0;
-            padding: 9px 0;
-            border-radius: 8px;
+            padding: 7px 16px;
+            border-radius: 7px;
             font-size: 1.04rem;
             text-align: center;
             font-weight: 600;
@@ -124,17 +119,27 @@
             border-top: 2px dashed #444;
             margin: 48px 0 40px 0;
         }
+        .empty-space {
+            height: 80px;
+            /* You can adjust this height or add your own style for the empty space */
+        }
         @media (max-width: 600px) {
+            .fixture-container {
+                padding: 18px 3vw 36px 3vw;
+            }
             .teams-row {
                 flex-direction: column;
                 gap: 28px;
             }
             .vs {
-                order: -1;
-                margin-bottom: 12px;
                 font-size: 2rem;
                 width: 70px;
                 height: 70px;
+                margin: 0;
+            }
+            .team img {
+                width: 72px;
+                height: 72px;
             }
         }
     </style>
@@ -143,7 +148,7 @@
     <div class="fixture-container">
         <!-- First Fixture -->
         <div class="fixture-title">Youth Friendly Football Match</div>
-        <div class="fixture-time">Saturday, June 7, 2025 &bull; 4:00 PM</div>
+        <div class="fixture-time">Friday, June 5, 2025 &bull; 08:00 AM</div>
         <div class="teams-row">
             <div class="team">
                 <img src="teamA.jpg" alt="Team A">
@@ -170,7 +175,10 @@
         </div>
 
         <div class="fixture-separator"></div>
-        </div>
+
+        <!-- Space for future fixture(s) -->
+        <div class="empty-space"></div>
+
     </div>
 </body>
 </html>
