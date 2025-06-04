@@ -131,6 +131,24 @@
             margin-bottom: 2px;
             font-weight: bold;
         }
+        /* Full time score styling */
+        .full-time-score {
+            margin-top: 22px;
+            text-align: center;
+        }
+        .full-time-score-inner {
+            display: inline-block;
+            background: #23272e;
+            padding: 8px 22px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffd700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .full-time-score-value {
+            color: #fff;
+        }
         @media (max-width: 600px) {
             .fixture-container {
                 padding: 18px 3vw 36px 3vw;
@@ -182,6 +200,13 @@
                 <div class="possibility draw">Draw 25%</div>
                 <div class="possibility away">Away 15%</div>
             </div>
+            <!-- Full Time Score section START -->
+            <div class="full-time-score">
+                <span class="full-time-score-inner">
+                    Full Time Score: <span class="full-time-score-value"> - </span>
+                </span>
+            </div>
+            <!-- Full Time Score section END -->
         </div>
 
         <div class="fixture-separator"></div>
