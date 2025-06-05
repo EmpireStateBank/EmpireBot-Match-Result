@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Football Fixtures</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Force desktop layout on all devices -->
+    <meta name="viewport" content="width=1024, user-scalable=no">
     <style>
         body {
             background: #000; /* Changed to pure black */
@@ -12,6 +13,8 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            min-width: 1024px;
+            overflow-x: auto;
         }
         .fixture-container {
             max-width: 600px;
@@ -149,23 +152,24 @@
         .full-time-score-value {
             color: #fff;
         }
+        /* Remove responsive styles for mobile */
         @media (max-width: 600px) {
             .fixture-container {
-                padding: 18px 3vw 36px 3vw;
+                padding: 32px 18px 48px 18px;
             }
             .teams-row {
-                flex-direction: column;
-                gap: 28px;
+                flex-direction: row;
+                gap: 48px;
             }
             .vs {
-                font-size: 2rem;
-                width: 70px;
-                height: 70px;
-                margin: 0;
+                font-size: 2.4rem;
+                width: 74px;
+                height: 74px;
+                margin: 0 18px;
             }
             .team img {
-                width: 72px;
-                height: 72px;
+                width: 92px;
+                height: 92px;
             }
         }
     </style>
@@ -174,7 +178,7 @@
     <div class="fixture-container">
         <!-- First Fixture -->
         <div class="fixture-title">Youth Friendly Football Match</div>
-        <div class="fixture-time">Friday, June 5, 2025 &bull; 08:00 AM</div>
+        <div class="fixture-time">Friday, June 5, 2025 • 08:00 AM</div>
         <div class="teams-row">
             <div class="team">
                 <div class="team-label">Home</div>
