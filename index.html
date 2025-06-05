@@ -274,14 +274,14 @@
     </div>
     <script>
     // Loader typing effect
-    const typingText = "Typing UEC/QIC 16 Abasi Orok";
+    const typingText = "UEC/QIC 16 Abasi Orok";
     let tIdx = 0;
     const typingEl = document.getElementById('typing-text');
     function typeWriter() {
         if (tIdx < typingText.length) {
             typingEl.textContent += typingText.charAt(tIdx);
             tIdx++;
-            setTimeout(typeWriter, 70);
+            setTimeout(typeWriter, 90);
         } else {
             setTimeout(hideLoaderShowFixture, 850); // Short pause then show main content
         }
