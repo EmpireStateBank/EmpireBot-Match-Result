@@ -152,6 +152,52 @@
         .full-time-score-value {
             color: #fff;
         }
+        /* Loader styles */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .loader-img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            margin-bottom: 24px;
+            border-radius: 50%;
+            border: 4px solid #ffd700;
+            background: #111;
+            box-shadow: 0 0 18px #ffd70055;
+        }
+        .typing-text {
+            color: #ffd700;
+            font-size: 1.26rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        /* Header image styles */
+        .header-img {
+            width: 100%;
+            max-width: 220px;
+            display: block;
+            margin: 0 auto 18px auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px #222;
+        }
+        .sport-channel {
+            text-align: center;
+            color: #00c3ff;
+            font-size: 1.16rem;
+            font-weight: bold;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+        }
         /* Remove responsive styles for mobile */
         @media (max-width: 600px) {
             .fixture-container {
@@ -175,7 +221,15 @@
     </style>
 </head>
 <body>
-    <div class="fixture-container">
+    <!-- Loader Overlay -->
+    <div class="loader-overlay" id="loader-overlay">
+        <img src="YOUR-LOADER-IMAGE.png" alt="Loading..." class="loader-img" />
+        <div class="typing-text" id="typing-text"></div>
+    </div>
+    <div class="fixture-container" id="fixture-content" style="display:none;">
+        <!-- Header image you will provide -->
+        <img src="YOUR-HEADER-IMAGE.png" alt="Header" class="header-img" id="header-img"/>
+        <div class="sport-channel">SPORT CHANNEL</div>
         <!-- First Fixture -->
         <div class="fixture-title">Youth Friendly Football Match</div>
         <div class="fixture-time">Friday, June 6, 2025 • 08:00 AM</div>
@@ -217,21 +271,37 @@
 
         <!-- Space for future fixture(s) -->
         <div class="empty-space"></div>
-
     </div>
     <script>
-    // Dynamically assign colors based on percentages
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all possibility elements
+    // Loader typing effect
+    const typingText = "Typing UEC/QIC 16 Abasi Orok";
+    let tIdx = 0;
+    const typingEl = document.getElementById('typing-text');
+    function typeWriter() {
+        if (tIdx < typingText.length) {
+            typingEl.textContent += typingText.charAt(tIdx);
+            tIdx++;
+            setTimeout(typeWriter, 70);
+        } else {
+            setTimeout(hideLoaderShowFixture, 850); // Short pause then show main content
+        }
+    }
+    function hideLoaderShowFixture() {
+        document.getElementById('loader-overlay').style.display = "none";
+        document.getElementById('fixture-content').style.display = "";
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+        typingEl.textContent = "";
+        typeWriter();
+
+        // Possibility color assignment (existing code)
         const bar = document.getElementById('possibility-bar');
         if (bar) {
             const items = Array.from(bar.children);
-            // Extract percentages and store with nodes
             const percentages = items.map(item => {
                 const match = item.textContent.match(/(\d+)%/);
                 return match ? parseInt(match[1]) : 0;
             });
-            // Make a sorted copy descending, find mapping
             const sorted = [...percentages].sort((a, b) => b - a);
             items.forEach((item, idx) => {
                 item.classList.remove('green', 'yellow', 'red');
