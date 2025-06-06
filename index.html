@@ -43,13 +43,29 @@
         .fixture-time { text-align: center; margin-bottom: 28px; font-size: 1.1rem; color: #00c3ff; }
         .teams-row { display: flex; justify-content: center; align-items: center; gap: 48px; margin-bottom: 22px; }
         .team { display: flex; flex-direction: column; align-items: center; }
+        .team-label {
+            color: #ffd700;
+            font-size: 1.01rem;
+            font-weight: 500;
+            margin-bottom: 3px;
+            text-shadow: 0 1px 3px #000a;
+            letter-spacing: 1px;
+        }
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 12px #222; }
+        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 8px #000a; }
         .stat-bar-inner { height: 16px; border-radius: 8px; margin: 0 8px; background: #23272e; position: relative; flex: 1; display: flex; }
         .stat-bar-home { background: linear-gradient(90deg, #0a3773 80%, #23272e 100%); border-top-left-radius: 8px; border-bottom-left-radius: 8px; height: 100%; }
         .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
         .stat-value { width: 42px; text-align: center; font-weight: bold; color: #fff; }
+        .stat-label {
+            color: #00c3ff;
+            font-size: 1.01rem;
+            font-weight: 600;
+            margin-left: 14px;
+            min-width: 120px;
+            display: inline-block;
+        }
         /* Event Box Styling */
         .events-timeline {
             margin-bottom: 24px;
@@ -93,9 +109,9 @@
             z-index: 0;
         }
         .event-label { 
-            display: flex; align-items: center; position: absolute; min-width: 210px; /* increased from 180px */
-            font-size: 1.11rem; /* increased from 1.06rem */
-            padding: 12px 20px;  /* increased from 9px 15px */
+            display: flex; align-items: center; position: absolute; min-width: 210px;
+            font-size: 1.11rem;
+            padding: 12px 20px;
             border-radius: 8px; 
             background: #222; color: #fff; box-shadow: 0 2px 8px #0007; 
             white-space: nowrap; font-weight: 600;
@@ -111,21 +127,19 @@
             border-radius: 7px; z-index: 3;
         }
         .event-minute-space {
-            margin-left: 30px; /* increased spacing between player name and minute */
+            margin-left: 45px;
             color: #ffd700;
             font-size: 0.99em;
         }
-        .event-label.home .event-minute-space {
-            margin-left: 30px;
-        }
+        .event-label.home .event-minute-space,
         .event-label.away .event-minute-space {
-            margin-left: 30px;
+            margin-left: 45px;
         }
-        .ht-label, .ft-label { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.13rem; color: #ffd700; background: #23272e; padding: 3px 18px; border-radius: 9px; font-weight: 700; z-index: 1;}
+        .ht-label, .ft-label { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.13rem; color: #ffd700; background: #23272e; padding: 3px 18px; border-radius: 9px; font-weight: 700; }
         .ht-label { margin-top: 8px; }
         .ft-label { margin-top: 8px; }
         .score-section { margin-top: 22px; text-align: center; }
-        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.13); margin-bottom: 8px;}
+        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.16); margin-bottom: 8px; }
         .score-value { color: #fff; }
         .match-possibility-bar { display: flex; justify-content: center; gap: 16px; margin-top: 7px; }
         .possibility { padding: 7px 16px; border-radius: 7px; font-size: 1.04rem; text-align: center; font-weight: 600; }
@@ -138,7 +152,7 @@
         .fixture-separator { border-top: 2px dashed #444; margin: 48px 0 40px 0; }
         .header-img { width: 100%; max-width: 220px; display: block; margin: 0 auto 18px auto; border-radius: 12px; box-shadow: 0 2px 16px #222; }
         .sport-channel { text-align: center; color: #00c3ff; font-size: 1.16rem; font-weight: bold; margin-bottom: 18px; letter-spacing: 2px; }
-        .match-venue { text-align: center; font-size: 1.04rem; font-weight: 600; color: #63e6be; margin-bottom: 10px; background: #23272e; padding: 6px 0; border-radius: 6px; box-shadow: 0 2px 8px #1b1b1b; }
+        .match-venue { text-align: center; font-size: 1.04rem; font-weight: 600; color: #63e6be; margin-bottom: 10px; background: #23272e; padding: 6px 0; border-radius: 6px; box-shadow: 0 2px 8px #0002; }
         .match-possibility-title { text-align: center; font-weight: 600; color: #00c3ff; margin-bottom: 8px; }
         .empty-space { height: 80px; }
         #add-fixture-btn {
@@ -251,11 +265,20 @@
             let m = typeof minute === "string" ? parseInt(minute, 10) : minute;
             // Place HT at 11th slot, FT at 22nd slot
             let index = 0;
-            if (minute > 90 || (typeof minute === "string" && minute.includes("+"))) {
-                return slot * 23;
+            if (minute === "ht" || (typeof minute === "string" && minute.includes("ht"))) {
+                return slot * 11;
             }
-            if (m <= 45) index = Math.round(m/4); // 0..11
-            else index = 11 + Math.round((m-45)/4); // 12..22
+            if (minute === "ft" || (typeof minute === "string" && minute.includes("ft"))) {
+                return slot * 22;
+            }
+            if (typeof minute === "string" && minute.includes("+")) {
+                // Extra time, place them after 90
+                index = 23;
+            } else if (m <= 45) {
+                index = Math.round(m / 4); // 0..11
+            } else {
+                index = 11 + Math.round((m - 45) / 4); // 12..22
+            }
             let top = slot * index;
             // Ensure minimum distance from lastTop
             if (top - lastTop < slot) {
@@ -350,10 +373,10 @@
                                 `;
                             }
                             if(type==="ht") {
-                                return `<div class="ht-label" style="top:462px;">${arg}</div>`;
+                                return `<div class="ht-label" style="top:528px;">${arg}</div>`;
                             }
                             if(type==="ft") {
-                                return `<div class="ft-label" style="top:924px;">${arg}</div>`;
+                                return `<div class="ft-label" style="top:1056px;">${arg}</div>`;
                             }
                             return '';
                         }).join('')
