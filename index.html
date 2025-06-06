@@ -46,13 +46,6 @@
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
         .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 12px #222; }
-        .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
-        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.22s, color 0.22s; }
-        .toggle-btn.active { background: #ffd700; color: #181818; }
-        .stats-bar { margin-bottom: 24px; }
-        .stat-row { display: flex; align-items: center; margin: 10px 0; }
-        .stat-label { width: 110px; text-align: center; color: #ffd700; font-weight: 600; font-size: 1rem; }
-        .stat-bar-outer { flex: 1; display: flex; align-items: center; }
         .stat-bar-inner { height: 16px; border-radius: 8px; margin: 0 8px; background: #23272e; position: relative; flex: 1; display: flex; }
         .stat-bar-home { background: linear-gradient(90deg, #0a3773 80%, #23272e 100%); border-top-left-radius: 8px; border-bottom-left-radius: 8px; height: 100%; }
         .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
@@ -100,11 +93,14 @@
             z-index: 0;
         }
         .event-label { 
-            display: flex; align-items: center; position: absolute; min-width: 180px; 
-            font-size: 1.06rem; padding: 9px 15px; border-radius: 8px; 
+            display: flex; align-items: center; position: absolute; min-width: 210px; /* increased from 180px */
+            font-size: 1.11rem; /* increased from 1.06rem */
+            padding: 12px 20px;  /* increased from 9px 15px */
+            border-radius: 8px; 
             background: #222; color: #fff; box-shadow: 0 2px 8px #0007; 
             white-space: nowrap; font-weight: 600;
             letter-spacing: 0.5px;
+            z-index: 2;
         }
         .event-label.home { left: calc(50% - 202px); justify-content: flex-end; background: #0a3773; }
         .event-label.away { left: 50%; justify-content: flex-start; background: #6d081b; }
@@ -112,23 +108,25 @@
             position: absolute; left: 50%; transform: translateX(-50%); 
             width: 68px; text-align: center; color: #ffd700; 
             font-size: 1.04rem; font-weight: 700; background: #23272e; 
-            border-radius: 7px; border: 1px solid #444; 
-            box-shadow: 0 1px 6px #0005; padding: 2px 0;
-            letter-spacing: 0.4px;
+            border-radius: 7px; z-index: 3;
         }
-        .icon-ball { width: 18px; height: 18px; margin-right: 7px; border-radius: 50%; border: 2px solid #fff; background: #fff; display: inline-block; }
-        .icon-arrow-up { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #2ecc40; margin-right: 7px; }
-        .icon-arrow-down { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #e74c3c; margin-right: 7px; }
+        .event-minute-space {
+            margin-left: 30px; /* increased spacing between player name and minute */
+            color: #ffd700;
+            font-size: 0.99em;
+        }
+        .event-label.home .event-minute-space {
+            margin-left: 30px;
+        }
+        .event-label.away .event-minute-space {
+            margin-left: 30px;
+        }
         .ht-label, .ft-label { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.13rem; color: #ffd700; background: #23272e; padding: 3px 18px; border-radius: 9px; font-weight: 700; z-index: 1;}
         .ht-label { margin-top: 8px; }
         .ft-label { margin-top: 8px; }
         .score-section { margin-top: 22px; text-align: center; }
         .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.13); margin-bottom: 8px;}
         .score-value { color: #fff; }
-        .header-img { width: 100%; max-width: 220px; display: block; margin: 0 auto 18px auto; border-radius: 12px; box-shadow: 0 2px 16px #222; }
-        .sport-channel { text-align: center; color: #00c3ff; font-size: 1.16rem; font-weight: bold; margin-bottom: 18px; letter-spacing: 2px; }
-        .match-venue { text-align: center; font-size: 1.04rem; font-weight: 600; color: #63e6be; margin-bottom: 10px; background: #23272e; padding: 6px 0; border-radius: 6px; box-shadow: 0 2px 8px #1b1b1b; }
-        .match-possibility-title { text-align: center; font-weight: 600; color: #00c3ff; margin-bottom: 8px; }
         .match-possibility-bar { display: flex; justify-content: center; gap: 16px; margin-top: 7px; }
         .possibility { padding: 7px 16px; border-radius: 7px; font-size: 1.04rem; text-align: center; font-weight: 600; }
         .possibility.green { background: #2ecc40 !important; color: #fff !important; }
@@ -138,6 +136,10 @@
         .possibility.draw { background: #434343; color: #00c3ff; }
         .possibility.away { background: #6d081b; color: #ffd700; }
         .fixture-separator { border-top: 2px dashed #444; margin: 48px 0 40px 0; }
+        .header-img { width: 100%; max-width: 220px; display: block; margin: 0 auto 18px auto; border-radius: 12px; box-shadow: 0 2px 16px #222; }
+        .sport-channel { text-align: center; color: #00c3ff; font-size: 1.16rem; font-weight: bold; margin-bottom: 18px; letter-spacing: 2px; }
+        .match-venue { text-align: center; font-size: 1.04rem; font-weight: 600; color: #63e6be; margin-bottom: 10px; background: #23272e; padding: 6px 0; border-radius: 6px; box-shadow: 0 2px 8px #1b1b1b; }
+        .match-possibility-title { text-align: center; font-weight: 600; color: #00c3ff; margin-bottom: 8px; }
         .empty-space { height: 80px; }
         #add-fixture-btn {
             display: block;
@@ -240,19 +242,28 @@
 
     let currentFixtureIndex = 0;
 
-    // Spread out events with more vertical space so player/action is never too close
-    function minuteToTop(minute) {
-        // Give at least 42px per event slot, and extra for second half
-        const slot = 42;
-        let m = typeof minute === "string" ? parseInt(minute, 10) : minute;
-        if (minute > 90 || (typeof minute === "string" && minute.includes("+"))) {
-            return slot * 23;
+    // Improved minuteToTop: Ensures a minimum vertical gap between all events for clarity
+    function minuteToTopFactory() {
+        let lastTop = -100;
+        return function(minute) {
+            // Give at least 48px per event slot (increased for clarity)
+            const slot = 48;
+            let m = typeof minute === "string" ? parseInt(minute, 10) : minute;
+            // Place HT at 11th slot, FT at 22nd slot
+            let index = 0;
+            if (minute > 90 || (typeof minute === "string" && minute.includes("+"))) {
+                return slot * 23;
+            }
+            if (m <= 45) index = Math.round(m/4); // 0..11
+            else index = 11 + Math.round((m-45)/4); // 12..22
+            let top = slot * index;
+            // Ensure minimum distance from lastTop
+            if (top - lastTop < slot) {
+                top = lastTop + slot;
+            }
+            lastTop = top;
+            return top;
         }
-        // Place HT at 11th slot, FT at 22nd slot
-        let index = 0;
-        if (m <= 45) index = Math.round(m/4); // 0..11
-        else index = 11 + Math.round((m-45)/4); // 12..22
-        return slot * index;
     }
 
     function renderFixture(f, idx) {
@@ -261,6 +272,9 @@
             stats, halfTimeScore, fullTimeScore, venue, possibility, events
         ] = f;
         const fixtureId = `fixture${idx+1}`;
+        // Use a fresh minuteToTop for each fixture to avoid overlap between fixtures
+        const minuteToTop = minuteToTopFactory();
+
         return `
         <div class="fixture-block" id="${fixtureId}">
             <div class="fixture-title">${title}</div>
@@ -315,16 +329,15 @@
                                 const top = minuteToTop(minute);
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
-                                    <span class="icon-ball"></span>${arg} <span style="margin-left:12px;">${minute}'</span>
+                                    <span class="icon-ball"></span>${arg} <span class="event-minute-space">${minute}'</span>
                                 </div>
-                                <div class="event-min" style="top:${top-7}px;">${minute}'</div>
                                 `;
                             }
                             if(type==="sub_in") {
                                 const top = minuteToTop(minute)+14;
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
-                                    <span class="icon-arrow-up"></span>${arg} IN <span style="margin-left:10px;color:#ffd700;font-size:0.99em;">${minute}'</span>
+                                    <span class="icon-arrow-up"></span>${arg} IN <span class="event-minute-space">${minute}'</span>
                                 </div>
                                 `;
                             }
@@ -332,7 +345,7 @@
                                 const top = minuteToTop(minute) + 27;
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
-                                    <span class="icon-arrow-down"></span>${arg} OUT <span style="margin-left:10px;color:#ffd700;font-size:0.99em;">${minute}'</span>
+                                    <span class="icon-arrow-down"></span>${arg} OUT <span class="event-minute-space">${minute}'</span>
                                 </div>
                                 `;
                             }
@@ -418,21 +431,18 @@
         }
     }
 
-    window.addEventListener('DOMContentLoaded', function() {
-        typeLoadingText(loadingText, document.getElementById('typing-text'), function() {
+    // On page load:
+    window.onload = function() {
+        const typingEl = document.getElementById('typing-text');
+        typeLoadingText(loadingText, typingEl, function() {
             setTimeout(function() {
+                document.getElementById("loading-overlay").style.display = "none";
+                document.getElementById("fixture-content").style.display = "";
                 document.getElementById('fixtures-root').innerHTML = renderFixture(fixtures[0], 0);
                 colorPossibilities();
-                document.getElementById('loading-overlay').style.display = 'none';
-                document.getElementById('fixture-content').style.display = '';
-                if (fixtures.length < 2) {
-                    const btn = document.getElementById('add-fixture-btn');
-                    btn.textContent = "No More Fixtures";
-                    btn.disabled = true;
-                }
-            }, 400);
+            }, 900);
         });
-    });
+    }
     </script>
 </body>
 </html>
