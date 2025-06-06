@@ -76,9 +76,6 @@
         .fixture-nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 18px; }
         .fixture-nav-btn { background: #23272e; color: #ffd700; border: 2px solid #ffd700; border-radius: 20px; padding: 6px 18px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s;}
         .fixture-nav-btn.active { background: #ffd700; color: #181818; }
-        /* For easier editing, make the JS array scroll horizontally on small screens */
-        .fixtures-js-array { overflow-x: auto; background: #1b1b1b; padding: 8px 4px; margin-bottom: 18px; font-size: 0.94em; }
-        pre { margin:0; color: #ffd700;}
     </style>
 </head>
 <body>
@@ -89,50 +86,31 @@
     <div class="fixture-container" id="fixture-content" style="display:none;">
         <img src="AddText_06-04-10.32.55.png" alt="Header" class="header-img" id="header-img"/>
         <div class="sport-channel">SPORT CHANNEL</div>
-        <div class="fixtures-js-array">
-            <pre>
-/* To add a new fixture, copy and fill the template below and paste inside the fixtures array (after a comma if needed): 
-[
-    "MATCH TITLE", // title
-    "DATE & TIME", // time
-    "HOME TEAM NAME", "HOME IMAGE FILE",
-    "AWAY TEAM NAME", "AWAY IMAGE FILE",
-    [
-        ["Corner Kicks",0,0],
-        ["Shots",0,0],
-        ["Shots on Target",0,0],
-        ["Ball Possession",0,0],
-        ["Yellow Cards",0,0],
-        ["Red Cards",0,0]
-    ],
-    "HT SCORE",
-    "FT SCORE",
-    "VENUE",
-    [
-        ["home", "Home XX%"],
-        ["draw", "Draw XX%"],
-        ["away", "Away XX%"]
-    ],
-    [
-        // ["goal","home/away",MINUTE,"PLAYER"],
-        // ["sub_in","home/away",MINUTE,"PLAYER"],
-        // ["sub_out","home/away",MINUTE,"PLAYER"],
-        // ["ht","","MINUTE","HT X-X"],
-        // ["ft","","MINUTE","FT X-X"]
-    ]
-]
-*/
-            </pre>
-        </div>
         <div id="fixture-nav-bar" class="fixture-nav"></div>
         <div id="fixtures-root"></div>
         <div class="fixture-separator"></div>
         <div class="empty-space"></div>
     </div>
     <script>
-    // =========================
-    //        FIXTURES
-    // =========================
+    // Typing text effect for loading
+    const loadingText = "UEC/QIC 16 Abasi Orok";
+    const typingDelay = 90; // ms per character
+
+    function typeLoadingText(text, el, cb) {
+        let idx = 0;
+        function type() {
+            el.textContent = text.slice(0, idx + 1);
+            idx++;
+            if (idx < text.length) {
+                setTimeout(type, typingDelay);
+            } else {
+                if (cb) cb();
+            }
+        }
+        type();
+    }
+
+    // SIMPLE FIXTURE DATA, EASY TO EDIT
     const fixtures = [
         [
             "Youth Friendly Football Match",
@@ -202,27 +180,7 @@
                 ["ft","","90","FT 3-1"]
             ]
         ]
-        // To add a new fixture, copy the template above, paste it here (add a comma before if not last), fill it, and you're done!
     ];
-
-    // Typing text effect for loading
-    const loadingText = "UEC/QIC 16 Abasi Orok";
-    const typingDelay = 90; // ms per character
-
-    function typeLoadingText(text, el, cb) {
-        let idx = 0;
-        function type() {
-            el.textContent = text.slice(0, idx + 1);
-            idx++;
-            if (idx < text.length) {
-                setTimeout(type, typingDelay);
-            } else {
-                if (cb) cb();
-            }
-        }
-        type();
-    }
-
     function minuteToTop(minute) {
         const start = 45, end = 415, minMinute = 0, maxMinute = 90;
         let m = typeof minute === "string" ? parseInt(minute, 10) : minute;
