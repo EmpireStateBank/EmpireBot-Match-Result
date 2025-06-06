@@ -57,18 +57,53 @@
         .stat-bar-home { background: linear-gradient(90deg, #0a3773 80%, #23272e 100%); border-top-left-radius: 8px; border-bottom-left-radius: 8px; height: 100%; }
         .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
         .stat-value { width: 42px; text-align: center; font-weight: bold; color: #fff; }
-        .events-timeline { margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-        .timeline-line { border-left: 3px solid #ffd700; min-height: 420px; position: absolute; left: 50%; transform: translateX(-50%); width: 0; z-index: 0; }
-        .timeline-container {
-            position: relative; width: 100%; height: 470px;
-            overflow-y: auto; background: transparent;
-            max-height: 470px;
-            scroll-behavior: smooth;
+        /* Event Box Styling */
+        .events-timeline {
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .event-label { display: flex; align-items: center; position: absolute; min-width: 140px; font-size: 1rem; padding: 5px 10px; border-radius: 6px; background: #222; color: #fff; box-shadow: 0 2px 8px #0007; }
-        .event-label.home { left: calc(50% - 170px); justify-content: flex-end; background: #0a3773; }
-        .event-label.away { left: 52%; justify-content: flex-start; background: #6d081b; }
-        .event-min { position: absolute; left: 50%; transform: translateX(-50%); width: 120px; text-align: center; color: #ffd700; font-size: 0.86rem; font-weight: 600; background: #23272e; border-radius: 7px; border: 1px solid #444; box-shadow: 0 1px 6px #0005; }
+        .events-box {
+            width: 96%;
+            max-width: 370px;
+            min-height: 340px;
+            max-height: 380px;
+            position: relative;
+            border-radius: 14px;
+            background: #191e33;
+            border: 2px solid #ffd700;
+            box-shadow: 0 2px 18px #0006;
+            overflow-y: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            scrollbar-width: thin;
+            scrollbar-color: #ffd700 #23272e;
+        }
+        .events-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        .events-box::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 6px;
+        }
+        .events-box::-webkit-scrollbar-track {
+            background: #23272e;
+        }
+        .timeline-line {
+            border-left: 3px solid #ffd700;
+            min-height: 100%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            z-index: 0;
+        }
+        .event-label { display: flex; align-items: center; position: absolute; min-width: 145px; font-size: 1rem; padding: 7px 13px; border-radius: 6px; background: #222; color: #fff; box-shadow: 0 2px 8px #0007; white-space: nowrap;}
+        .event-label.home { left: calc(50% - 178px); justify-content: flex-end; background: #0a3773; }
+        .event-label.away { left: 54%; justify-content: flex-start; background: #6d081b; }
+        .event-min { position: absolute; left: 50%; transform: translateX(-50%); width: 120px; text-align: center; color: #ffd700; font-size: 0.90rem; font-weight: 700; background: #23272e; border-radius: 7px; border: 1px solid #444; box-shadow: 0 1px 6px #0005; }
         .icon-ball { width: 18px; height: 18px; margin-right: 4px; border-radius: 50%; border: 2px solid #fff; background: #fff; display: inline-block; }
         .icon-arrow-up { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #2ecc40; margin-right: 5px; }
         .icon-arrow-down { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #e74c3c; margin-right: 5px; }
@@ -193,15 +228,22 @@
 
     let currentFixtureIndex = 0;
 
+    // Adjusted: More vertical space per minute so names fit, especially around crowded minutes
     function minuteToTop(minute) {
-        // Spread the event minutes more apart for better visibility
-        const start = 45, end = 415, minMinute = 0, maxMinute = 90;
+        // More vertical space, and a slightly non-linear spread for fewer overlaps
+        const start = 35, end = 540, minMinute = 0, maxMinute = 90;
         let m = typeof minute === "string" ? parseInt(minute, 10) : minute;
         if (minute > 90 || (typeof minute === "string" && minute.includes("+"))) {
-            return end + 20;
+            return end + 32;
         }
-        return start + ((end - start) * ((m - minMinute) / (maxMinute - minMinute)));
+        // Squeeze a little more space for first and second halves
+        let spread = (m < 45) ? ((end - start) * 0.52) : ((end - start) * 0.48);
+        let adjStart = (m < 45) ? start : (start + (end - start) * 0.52);
+        let base = (m < 45) ? 0 : 45;
+        let denom = (m < 45) ? 45 : 45;
+        return adjStart + (spread * (m - base) / denom);
     }
+
     function renderFixture(f, idx) {
         const [
             title, time, homeName, homeImg, awayName, awayImg,
@@ -253,8 +295,8 @@
             }
             </div>
             <div class="events-timeline" id="${fixtureId}-events" style="display:none;">
-                <div class="timeline-container">
-                    <div class="timeline-line" style="height:100%;"></div>
+                <div class="events-box">
+                    <div class="timeline-line" style="height:530px;"></div>
                     ${
                         events.map(ev => {
                             const [type, team, minute, arg] = ev;
@@ -264,11 +306,11 @@
                                 <div class="event-label ${team}" style="top:${top}px;">
                                     <span class="icon-ball"></span>${arg} ${minute}'
                                 </div>
-                                <div class="event-min" style="top:${top-4}px;">${minute}'</div>
+                                <div class="event-min" style="top:${top-8}px;">${minute}'</div>
                                 `;
                             }
                             if(type==="sub_in") {
-                                const top = minuteToTop(minute);
+                                const top = minuteToTop(minute)+9;
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
                                     <span class="icon-arrow-up"></span>${arg} IN <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">${minute}'</span>
@@ -276,7 +318,7 @@
                                 `;
                             }
                             if(type==="sub_out") {
-                                const top = minuteToTop(minute) + 28;
+                                const top = minuteToTop(minute) + 34;
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
                                     <span class="icon-arrow-down"></span>${arg} OUT <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">${minute}'</span>
@@ -284,10 +326,10 @@
                                 `;
                             }
                             if(type==="ht") {
-                                return `<div class="ht-label" style="top:165px;">${arg}</div>`;
+                                return `<div class="ht-label" style="top:246px;">${arg}</div>`;
                             }
                             if(type==="ft") {
-                                return `<div class="ft-label" style="top:415px;">${arg}</div>`;
+                                return `<div class="ft-label" style="top:530px;">${arg}</div>`;
                             }
                             return '';
                         }).join('')
