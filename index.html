@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Football Fixtures</title>
-    <!-- Force desktop layout on all devices, but allow zooming -->
     <meta name="viewport" content="width=1024, user-scalable=yes">
     <style>
         body {
-            background: #000; /* Changed to pure black */
+            background: #000;
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -23,6 +22,9 @@
             border-radius: 14px;
             box-shadow: 0 4px 32px rgba(0,0,0,0.4);
             padding: 32px 18px 48px 18px;
+        }
+        .fixture-block {
+            margin-bottom: 64px;
         }
         .fixture-title {
             font-size: 1.5rem;
@@ -82,14 +84,194 @@
             box-shadow: 0 2px 16px rgba(0,0,0,0.3) inset;
             border: 2px solid #ffd700;
         }
-        .match-info {
-            margin-top: 18px;
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .toggle-btn {
+            background: #23272e;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            padding: 7px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .toggle-btn.active {
+            background: #ffd700;
+            color: #181818;
+        }
+        .stats-bar {
+            margin-bottom: 24px;
+        }
+        .stat-row {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .stat-label {
+            width: 110px;
+            text-align: center;
+            color: #ffd700;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .stat-bar-outer {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .stat-bar-inner {
+            height: 16px;
+            border-radius: 8px;
+            margin: 0 8px;
+            background: #23272e;
+            position: relative;
+            flex: 1;
+            display: flex;
+        }
+        .stat-bar-home {
+            background: linear-gradient(90deg, #0a3773 80%, #23272e 100%);
+            border-top-left-radius: 8px; border-bottom-left-radius: 8px;
+            height: 100%;
+        }
+        .stat-bar-away {
+            background: linear-gradient(270deg, #6d081b 80%, #23272e 100%);
+            border-top-right-radius: 8px; border-bottom-right-radius: 8px;
+            height: 100%;
+        }
+        .stat-value {
+            width: 42px;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+        }
+        .events-timeline {
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .timeline-line {
+            border-left: 3px solid #ffd700;
+            min-height: 420px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            z-index: 0;
+        }
+        .timeline-container {
+            position: relative;
+            width: 100%;
+            height: 470px;
+        }
+        .event-label {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            min-width: 140px;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background: #222;
+            color: #fff;
+            box-shadow: 0 2px 10px #00000033;
+            z-index: 2;
+        }
+        .event-label.home {
+            left: calc(50% - 170px);
+            justify-content: flex-end;
+            background: #0a3773;
+        }
+        .event-label.away {
+            left: 52%;
+            justify-content: flex-start;
+            background: #6d081b;
+        }
+        .event-min {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            text-align: center;
+            color: #ffd700;
+            font-size: 0.86rem;
+            font-weight: 600;
+            background: #23272e;
+            border-radius: 6px;
+            z-index: 1;
+            padding: 1px 6px;
+        }
+        .icon-ball {
+            width: 18px; height: 18px; margin-right: 4px; border-radius: 50%; border: 2px solid #fff; background: #fff; display: inline-block;
+        }
+        .icon-ball.owngoal {
+            border: 2px solid #e74c3c; background: #e74c3c;
+        }
+        .icon-arrow-up {
+            width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #2ecc40; margin-right: 5px;
+        }
+        .icon-arrow-down {
+            width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #e74c3c; margin-right: 5px;
+        }
+        .ht-label, .ft-label {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1rem;
+            color: #ffd700;
+            background: #23272e;
+            padding: 3px 18px;
+            border-radius: 9px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        .ht-label { margin-top: 8px; }
+        .ft-label { margin-top: 8px; }
+        .score-section {
+            margin-top: 22px;
+            text-align: center;
+        }
+        .score-inner {
+            display: inline-block;
+            background: #23272e;
+            padding: 8px 22px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffd700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            margin-bottom: 10px;
+        }
+        .score-value {
+            color: #fff;
+        }
+        .header-img {
+            width: 100%;
+            max-width: 220px;
+            display: block;
+            margin: 0 auto 18px auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px #222;
+        }
+        .sport-channel {
+            text-align: center;
+            color: #00c3ff;
+            font-size: 1.16rem;
+            font-weight: bold;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
         }
         .match-venue {
             text-align: center;
             font-size: 1.04rem;
             font-weight: 600;
-            color: #63e6be; /* Teal green */
+            color: #63e6be;
             margin-bottom: 10px;
             background: #23272e;
             padding: 6px 0;
@@ -128,96 +310,6 @@
         .empty-space {
             height: 80px;
         }
-        .team-label {
-            font-size: 0.98rem;
-            color: #ffd700;
-            margin-bottom: 2px;
-            font-weight: bold;
-        }
-        /* Full time score styling */
-        .full-time-score {
-            margin-top: 22px;
-            text-align: center;
-        }
-        .full-time-score-inner {
-            display: inline-block;
-            background: #23272e;
-            padding: 8px 22px;
-            border-radius: 8px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #ffd700;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-        }
-        .full-time-score-value {
-            color: #fff;
-        }
-        /* Loader styles */
-        .loader-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        .loader-img {
-            width: 110px;
-            height: 110px;
-            object-fit: contain;
-            margin-bottom: 24px;
-            border-radius: 50%;
-            border: 4px solid #ffd700;
-            background: #111;
-            box-shadow: 0 0 18px #ffd70055;
-        }
-        .typing-text {
-            color: #ffd700;
-            font-size: 1.26rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 18px;
-            text-align: center;
-        }
-        /* Header image styles */
-        .header-img {
-            width: 100%;
-            max-width: 220px;
-            display: block;
-            margin: 0 auto 18px auto;
-            border-radius: 12px;
-            box-shadow: 0 2px 16px #222;
-        }
-        .sport-channel {
-            text-align: center;
-            color: #00c3ff;
-            font-size: 1.16rem;
-            font-weight: bold;
-            margin-bottom: 18px;
-            letter-spacing: 2px;
-        }
-        /* Remove responsive styles for mobile */
-        @media (max-width: 600px) {
-            .fixture-container {
-                padding: 32px 18px 48px 18px;
-            }
-            .teams-row {
-                flex-direction: row;
-                gap: 48px;
-            }
-            .vs {
-                font-size: 2.4rem;
-                width: 74px;
-                height: 74px;
-                margin: 0 18px;
-            }
-            .team img {
-                width: 92px;
-                height: 92px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -227,49 +319,165 @@
         <div class="typing-text" id="typing-text"></div>
     </div>
     <div class="fixture-container" id="fixture-content" style="display:none;">
-        <!-- Header image you will provide -->
         <img src="AddText_06-04-10.32.55.png" alt="Header" class="header-img" id="header-img"/>
         <div class="sport-channel">SPORT CHANNEL</div>
-        <!-- First Fixture -->
-        <div class="fixture-title">Youth Friendly Football Match</div>
-        <div class="fixture-time">Friday, June 6, 2025 • 08:00 AM</div>
-        <div class="teams-row">
-            <div class="team">
-                <div class="team-label">Home</div>
-                <img src="AddText_06-05-05.08.00.png" alt="Team A">
-                <div class="team-name">Divine God's Mercy Academy</div>
+        
+        <!-- Fixture Block START (Copy everything in .fixture-block for new fixtures) -->
+        <div class="fixture-block" id="fixture1">
+            <div class="fixture-title">Youth Friendly Football Match</div>
+            <div class="fixture-time">Friday, June 6, 2025 • 08:00 AM</div>
+            <div class="teams-row">
+                <div class="team">
+                    <div class="team-label">Home</div>
+                    <img src="AddText_06-05-05.08.00.png" alt="Team A">
+                    <div class="team-name">Divine God's Mercy Academy</div>
+                </div>
+                <div class="vs">VS</div>
+                <div class="team">
+                    <div class="team-label">Away</div>
+                    <img src="AddText_06-04-01.09.17.png" alt="Team B">
+                    <div class="team-name">The Rock FC</div>
+                </div>
             </div>
-            <div class="vs">VS</div>
-            <div class="team">
-                <div class="team-label">Away</div>
-                <img src="AddText_06-04-01.09.17.png" alt="Team B">
-                <div class="team-name">The Rock FC</div>
+            <!-- Toggle Buttons -->
+            <div class="toggle-buttons">
+                <button class="toggle-btn active" onclick="showStats('fixture1')">Match Stats</button>
+                <button class="toggle-btn" onclick="showEvents('fixture1')">Events</button>
+            </div>
+            <!-- Match Stats Section -->
+            <div class="stats-bar" id="fixture1-stats">
+                <div class="stat-row">
+                    <div class="stat-value" style="color:#ffd700;">2</div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner">
+                            <div class="stat-bar-home" style="width:28%;"></div>
+                            <div class="stat-bar-away" style="width:72%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-value" style="color:#ffd700;">5</div>
+                    <div class="stat-label">Corner Kicks</div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-value" style="color:#ffd700;">17</div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner">
+                            <div class="stat-bar-home" style="width:71%;"></div>
+                            <div class="stat-bar-away" style="width:29%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-value" style="color:#ffd700;">7</div>
+                    <div class="stat-label">Shots</div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-value" style="color:#ffd700;">5</div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner">
+                            <div class="stat-bar-home" style="width:63%;"></div>
+                            <div class="stat-bar-away" style="width:37%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-value" style="color:#ffd700;">3</div>
+                    <div class="stat-label">Shots on Target</div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-value" style="color:#ffd700;">40</div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner">
+                            <div class="stat-bar-home" style="width:62%;"></div>
+                            <div class="stat-bar-away" style="width:38%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-value" style="color:#ffd700;">25</div>
+                    <div class="stat-label">Dangerous Attacks</div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-value" style="color:#ffd700;">1</div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner">
+                            <div class="stat-bar-home" style="width:33%;"></div>
+                            <div class="stat-bar-away" style="width:67%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-value" style="color:#ffd700;">2</div>
+                    <div class="stat-label">Yellow Cards</div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat-value" style="color:#ffd700;">2</div>
+                    <div class="stat-bar-outer">
+                        <div class="stat-bar-inner">
+                            <div class="stat-bar-home" style="width:67%;"></div>
+                            <div class="stat-bar-away" style="width:33%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-value" style="color:#ffd700;">1</div>
+                    <div class="stat-label">Red Cards</div>
+                </div>
+            </div>
+            <!-- Events Section -->
+            <div class="events-timeline" id="fixture1-events" style="display:none;">
+                <div class="timeline-container">
+                    <div class="timeline-line" style="height:100%;"></div>
+                    <!-- Sample Events and Minutes -->
+                    <div class="event-label home" style="top:5px;">
+                        <span class="icon-ball"></span>John 1'
+                    </div>
+                    <div class="event-min" style="top:0px;">1'</div>
+                    <div class="event-label away" style="top:49px;">
+                        <span class="icon-ball owngoal"></span>James OG 9'
+                    </div>
+                    <div class="event-min" style="top:45px;">9'</div>
+                    <div class="event-label home" style="top:85px;">
+                        <span class="icon-arrow-up"></span>Peter IN <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">30'</span>
+                    </div>
+                    <div class="event-label home" style="top:109px;">
+                        <span class="icon-arrow-down"></span>Paul OUT <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">30'</span>
+                    </div>
+                    <div class="event-min" style="top:86px;">30'</div>
+                    <div class="ht-label" style="top:165px;">HT 2-3</div>
+                    <div class="event-label away" style="top:210px;">
+                        <span class="icon-ball"></span>Mike 47'
+                    </div>
+                    <div class="event-min" style="top:210px;">47'</div>
+                    <div class="event-label home" style="top:250px;">
+                        <span class="icon-ball"></span>Chris 53'
+                    </div>
+                    <div class="event-min" style="top:250px;">53'</div>
+                    <div class="event-label away" style="top:320px;">
+                        <span class="icon-arrow-up"></span>Sam IN <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">72'</span>
+                    </div>
+                    <div class="event-label away" style="top:344px;">
+                        <span class="icon-arrow-down"></span>Tom OUT <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">72'</span>
+                    </div>
+                    <div class="event-min" style="top:320px;">72'</div>
+                    <div class="ft-label" style="top:415px;">FT 4-6</div>
+                </div>
+            </div>
+            <!-- Score Section (optional duplicate in timeline above) -->
+            <div class="score-section">
+                <div class="score-inner">
+                    Half Time Score: <span class="score-value">2-3</span>
+                </div>
+                <br>
+                <div class="score-inner">
+                    Full Time Score: <span class="score-value">4-6</span>
+                </div>
+            </div>
+            <div class="match-info">
+                <div class="match-venue">
+                    Venue: Piaco Comprehensive College
+                </div>
+                <div class="match-possibility-title">
+                    Match Possibility
+                </div>
+                <div class="match-possibility-bar" id="fixture1-possibility-bar">
+                    <div class="possibility home">Home 60%</div>
+                    <div class="possibility draw">Draw 30%</div>
+                    <div class="possibility away">Away 10%</div>
+                </div>
             </div>
         </div>
-        <div class="match-info">
-            <div class="match-venue">
-                Venue: Piaco Comprehensive College
-            </div>
-            <div class="match-possibility-title">
-                Match Possibility
-            </div>
-            <div class="match-possibility-bar" id="possibility-bar">
-                <div class="possibility home">Home 60%</div>
-                <div class="possibility draw">Draw 30%</div>
-                <div class="possibility away">Away 10%</div>
-            </div>
-            <!-- Full Time Score section START -->
-            <div class="full-time-score">
-                <span class="full-time-score-inner">
-                    Full Time Score: <span class="full-time-score-value"> 4-6 </span>
-                </span>
-            </div>
-            <!-- Full Time Score section END -->
-        </div>
-
+        <!-- Fixture Block END -->
         <div class="fixture-separator"></div>
-
-        <!-- Space for future fixture(s) -->
         <div class="empty-space"></div>
     </div>
     <script>
@@ -283,7 +491,7 @@
             tIdx++;
             setTimeout(typeWriter, 130);
         } else {
-            setTimeout(hideLoaderShowFixture, 890); // Short pause then show main content
+            setTimeout(hideLoaderShowFixture, 890);
         }
     }
     function hideLoaderShowFixture() {
@@ -294,9 +502,8 @@
         typingEl.textContent = "";
         typeWriter();
 
-        // Possibility color assignment (existing code)
-        const bar = document.getElementById('possibility-bar');
-        if (bar) {
+        // Possibility color assignment for each fixture
+        document.querySelectorAll('[id$="-possibility-bar"]').forEach(bar => {
             const items = Array.from(bar.children);
             const percentages = items.map(item => {
                 const match = item.textContent.match(/(\d+)%/);
@@ -313,8 +520,26 @@
                     item.classList.add('red');
                 }
             });
-        }
+        });
     });
+
+    // Toggle Stats/Events per fixture block
+    function showStats(fixtureId) {
+        document.querySelector(`#${fixtureId}-stats`).style.display = "";
+        document.querySelector(`#${fixtureId}-events`).style.display = "none";
+        // Button classes
+        let block = document.getElementById(fixtureId);
+        block.querySelector('.toggle-btn:nth-child(1)').classList.add("active");
+        block.querySelector('.toggle-btn:nth-child(2)').classList.remove("active");
+    }
+    function showEvents(fixtureId) {
+        document.querySelector(`#${fixtureId}-stats`).style.display = "none";
+        document.querySelector(`#${fixtureId}-events`).style.display = "";
+        // Button classes
+        let block = document.getElementById(fixtureId);
+        block.querySelector('.toggle-btn:nth-child(1)').classList.remove("active");
+        block.querySelector('.toggle-btn:nth-child(2)').classList.add("active");
+    }
     </script>
 </body>
 </html>
