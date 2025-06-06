@@ -67,8 +67,8 @@
         .events-box {
             width: 96%;
             max-width: 370px;
-            min-height: 340px;
-            max-height: 380px;
+            min-height: 410px;
+            max-height: 440px;
             position: relative;
             border-radius: 14px;
             background: #191e33;
@@ -77,7 +77,6 @@
             overflow-y: auto;
             margin: 0 auto 0 auto;
             padding: 0 0 0 0;
-            /* Hide scrollbar for Chrome, Safari and Opera */
             scrollbar-width: thin;
             scrollbar-color: #ffd700 #23272e;
         }
@@ -100,14 +99,27 @@
             width: 0;
             z-index: 0;
         }
-        .event-label { display: flex; align-items: center; position: absolute; min-width: 145px; font-size: 1rem; padding: 7px 13px; border-radius: 6px; background: #222; color: #fff; box-shadow: 0 2px 8px #0007; white-space: nowrap;}
-        .event-label.home { left: calc(50% - 178px); justify-content: flex-end; background: #0a3773; }
+        .event-label { 
+            display: flex; align-items: center; position: absolute; min-width: 180px; 
+            font-size: 1.06rem; padding: 9px 15px; border-radius: 8px; 
+            background: #222; color: #fff; box-shadow: 0 2px 8px #0007; 
+            white-space: nowrap; font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .event-label.home { left: calc(50% - 202px); justify-content: flex-end; background: #0a3773; }
         .event-label.away { left: 54%; justify-content: flex-start; background: #6d081b; }
-        .event-min { position: absolute; left: 50%; transform: translateX(-50%); width: 120px; text-align: center; color: #ffd700; font-size: 0.90rem; font-weight: 700; background: #23272e; border-radius: 7px; border: 1px solid #444; box-shadow: 0 1px 6px #0005; }
-        .icon-ball { width: 18px; height: 18px; margin-right: 4px; border-radius: 50%; border: 2px solid #fff; background: #fff; display: inline-block; }
-        .icon-arrow-up { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #2ecc40; margin-right: 5px; }
-        .icon-arrow-down { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #e74c3c; margin-right: 5px; }
-        .ht-label, .ft-label { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.1rem; color: #ffd700; background: #23272e; padding: 3px 18px; border-radius: 9px; font-weight: 700; z-index: 1;}
+        .event-min { 
+            position: absolute; left: 50%; transform: translateX(-50%); 
+            width: 68px; text-align: center; color: #ffd700; 
+            font-size: 1.04rem; font-weight: 700; background: #23272e; 
+            border-radius: 7px; border: 1px solid #444; 
+            box-shadow: 0 1px 6px #0005; padding: 2px 0;
+            letter-spacing: 0.4px;
+        }
+        .icon-ball { width: 18px; height: 18px; margin-right: 7px; border-radius: 50%; border: 2px solid #fff; background: #fff; display: inline-block; }
+        .icon-arrow-up { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid #2ecc40; margin-right: 7px; }
+        .icon-arrow-down { width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #e74c3c; margin-right: 7px; }
+        .ht-label, .ft-label { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1.13rem; color: #ffd700; background: #23272e; padding: 3px 18px; border-radius: 9px; font-weight: 700; z-index: 1;}
         .ht-label { margin-top: 8px; }
         .ft-label { margin-top: 8px; }
         .score-section { margin-top: 22px; text-align: center; }
@@ -228,20 +240,19 @@
 
     let currentFixtureIndex = 0;
 
-    // Adjusted: More vertical space per minute so names fit, especially around crowded minutes
+    // Spread out events with more vertical space so player/action is never too close
     function minuteToTop(minute) {
-        // More vertical space, and a slightly non-linear spread for fewer overlaps
-        const start = 35, end = 540, minMinute = 0, maxMinute = 90;
+        // Give at least 42px per event slot, and extra for second half
+        const slot = 42;
         let m = typeof minute === "string" ? parseInt(minute, 10) : minute;
         if (minute > 90 || (typeof minute === "string" && minute.includes("+"))) {
-            return end + 32;
+            return slot * 23;
         }
-        // Squeeze a little more space for first and second halves
-        let spread = (m < 45) ? ((end - start) * 0.52) : ((end - start) * 0.48);
-        let adjStart = (m < 45) ? start : (start + (end - start) * 0.52);
-        let base = (m < 45) ? 0 : 45;
-        let denom = (m < 45) ? 45 : 45;
-        return adjStart + (spread * (m - base) / denom);
+        // Place HT at 11th slot, FT at 22nd slot
+        let index = 0;
+        if (m <= 45) index = Math.round(m/4); // 0..11
+        else index = 11 + Math.round((m-45)/4); // 12..22
+        return slot * index;
     }
 
     function renderFixture(f, idx) {
@@ -296,7 +307,7 @@
             </div>
             <div class="events-timeline" id="${fixtureId}-events" style="display:none;">
                 <div class="events-box">
-                    <div class="timeline-line" style="height:530px;"></div>
+                    <div class="timeline-line" style="height:950px;"></div>
                     ${
                         events.map(ev => {
                             const [type, team, minute, arg] = ev;
@@ -304,32 +315,32 @@
                                 const top = minuteToTop(minute);
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
-                                    <span class="icon-ball"></span>${arg} ${minute}'
+                                    <span class="icon-ball"></span>${arg} <span style="margin-left:12px;">${minute}'</span>
                                 </div>
-                                <div class="event-min" style="top:${top-8}px;">${minute}'</div>
+                                <div class="event-min" style="top:${top-7}px;">${minute}'</div>
                                 `;
                             }
                             if(type==="sub_in") {
-                                const top = minuteToTop(minute)+9;
+                                const top = minuteToTop(minute)+14;
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
-                                    <span class="icon-arrow-up"></span>${arg} IN <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">${minute}'</span>
+                                    <span class="icon-arrow-up"></span>${arg} IN <span style="margin-left:10px;color:#ffd700;font-size:0.99em;">${minute}'</span>
                                 </div>
                                 `;
                             }
                             if(type==="sub_out") {
-                                const top = minuteToTop(minute) + 34;
+                                const top = minuteToTop(minute) + 27;
                                 return `
                                 <div class="event-label ${team}" style="top:${top}px;">
-                                    <span class="icon-arrow-down"></span>${arg} OUT <span style="margin-left:3px;color:#ffd700;font-size:0.85em;">${minute}'</span>
+                                    <span class="icon-arrow-down"></span>${arg} OUT <span style="margin-left:10px;color:#ffd700;font-size:0.99em;">${minute}'</span>
                                 </div>
                                 `;
                             }
                             if(type==="ht") {
-                                return `<div class="ht-label" style="top:246px;">${arg}</div>`;
+                                return `<div class="ht-label" style="top:462px;">${arg}</div>`;
                             }
                             if(type==="ft") {
-                                return `<div class="ft-label" style="top:530px;">${arg}</div>`;
+                                return `<div class="ft-label" style="top:924px;">${arg}</div>`;
                             }
                             return '';
                         }).join('')
