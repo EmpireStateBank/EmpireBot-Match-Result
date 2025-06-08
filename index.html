@@ -85,7 +85,7 @@
         .player-position { color: #63e6be !important; font-weight: bold; }
         .player-goals { color: #2ecc40 !important; font-weight: bold; }
         .player-assists { color: #ff9800 !important; font-weight: bold; }
-        .fixture-container { max-width: 600px; margin: 48px auto; background: #181818; border-radius: 14px; box-shadow: 0 4px 32px rgba(0,0,0,0.4); padding: 32px 18px 48px 18px; position:relative; }
+        .fixture-container { max-width: 600px; margin: 48px auto; background: #181818; border-radius: 14px; box-shadow: 0 4px 32px rgba(0,0,0,0.4); padding: 32px 18px 48px 18px; position:relative;}
         .fixture-block { margin-bottom: 32px; background: #1f232a; border-radius: 12px; box-shadow: 0 2px 10px #0005; position:relative; }
         .fixture-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 9px; text-align: center; color: #ffd700; letter-spacing: 1px; }
         .fixture-time { text-align: center; margin-bottom: 28px; font-size: 1.1rem; color: #00c3ff; }
@@ -93,7 +93,7 @@
         .team { display: flex; flex-direction: column; align-items: center; }
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 12px #0007; }
+        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px #ffd70044; }
         .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
         .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s; }
         .toggle-btn.active { background: #ffd700; color: #181818; }
@@ -106,7 +106,7 @@
         .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
         .stat-value { width: 42px; text-align: center; font-weight: bold; color: #fff; }
         .score-section { margin-top: 22px; text-align: center; }
-        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.18); margin-bottom: 7px; }
+        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.12); margin-bottom: 6px; }
         .score-value { color: #fff; }
         .fixture-toggle-btn {
             display: block;
@@ -167,7 +167,7 @@
         .lineup-event-minute.event-label { background: #00c3ff; color: #191e33; }
         .lineup-event-action { min-width: 58px; color: #63e6be; display: flex; align-items: center; gap: 4px; }
         .lineup-event-player { color: #fff; flex: 1; }
-        .icon-arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid #2ecc40; display: inline-block; margin-right: 2px; }
+        .icon-arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid #2ecc40; display: inline-block; margin-right: 2px;}
         .icon-arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid #e74c3c; display: inline-block; margin-right: 2px; }
         .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color: #ffd700; }
         .player-indicator.away { background: #6d081b; color: #ffd700; }
@@ -205,6 +205,23 @@
         .possibility.home { background: #0a3773; color: #ffd700; }
         .possibility.draw { background: #434343; color: #00c3ff; }
         .possibility.away { background: #6d081b; color: #ffd700; }
+        /* --- Home and Away team-label styles changed from black to original colors --- */
+        .team-label {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            padding: 3px 15px;
+            border-radius: 10px;
+            background: #23272e;
+        }
+        .team:first-child .team-label { /* Home */
+            background: #0a3773;
+            color: #ffd700;
+        }
+        .team:last-child .team-label { /* Away */
+            background: #6d081b;
+            color: #ffd700;
+        }
         @media (max-width: 800px) { .lineup-flex-wrap { flex-direction: column; } }
         @media (max-width: 480px) {
             .fixture-container, .player-stats-container, .header-block { width: 96vw !important; min-width: 0 !important; }
@@ -245,7 +262,6 @@
         }
         type();
     }
-    // 25 player objects
     const playerStatsArr = [
         { number: 1, name: "John Okon", position: "Goalkeeper", goals: 0, assists: 0 },
         { number: 2, name: "Samuel Udoh", position: "Defender", goals: 0, assists: 0 },
@@ -354,7 +370,6 @@
             return `${min}'`;
         }
         if (typeof min === 'string' && min.match(/^\d+\+\d+$/)) {
-            // e.g. "90+2"
             return `${min}'`;
         }
         if (typeof min === 'string' && /^\d+$/.test(min)) {
@@ -451,7 +466,6 @@
                               fixture.events.map(ev => {
                                 const [type, team, minute, arg] = ev;
                                 if(type === "ht" || type === "ft") {
-                                    // Half/full time, show as result row
                                     return `<div class="lineup-event-row" style="justify-content:center; color:#ffd700; font-weight:bold;">
                                                 <span class="lineup-event-minute" style="background:#ffd700; color:#191e33;">${type === "ht" ? "Half Time" : "Full Time"}</span>
                                                 <span style="margin-left:10px;">${arg}</span>
