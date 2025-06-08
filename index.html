@@ -93,9 +93,9 @@
         .team { display: flex; flex-direction: column; align-items: center; }
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center;}
+        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 12px #0007; }
         .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
-        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s;}
+        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s; }
         .toggle-btn.active { background: #ffd700; color: #181818; }
         .stats-bar { margin-bottom: 24px; }
         .stat-row { display: flex; align-items: center; margin: 10px 0; }
@@ -106,7 +106,7 @@
         .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
         .stat-value { width: 42px; text-align: center; font-weight: bold; color: #fff; }
         .score-section { margin-top: 22px; text-align: center; }
-        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.18); margin-bottom: 7px; }
         .score-value { color: #fff; }
         .fixture-toggle-btn {
             display: block;
@@ -169,9 +169,8 @@
         .lineup-event-player { color: #fff; flex: 1; }
         .icon-arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid #2ecc40; display: inline-block; margin-right: 2px; }
         .icon-arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid #e74c3c; display: inline-block; margin-right: 2px; }
-        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color: #ffd700; letter-spacing: 0.5px; }
+        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color: #ffd700; }
         .player-indicator.away { background: #6d081b; color: #ffd700; }
-        /* Yellow-Gold text for venue and match info */
         .match-venue { 
             text-align: center; 
             font-size: 1.04rem; 
@@ -302,7 +301,7 @@
             ["goal","away",15,"Paul"],
             ["goal","home",26,"Digma"],
             ["goal","away",40,"Christian"],
-            ["goal","home",45+6,"Digma"],
+            ["goal","home","45+6","Digma"],
             ["ht","","48","HT 2-2"],
             ["goal","home",52,"Digma"],
             ["goal","away",60,"Ronaldo"],
@@ -311,7 +310,7 @@
             ["sub_in","away",70,"captain"],
             ["goal","away",76,"Paul"],
             ["goal","away",85,"Paul"],
-            ["goal","away",90+2,"Ronaldo"],
+            ["goal","away","90+2","Ronaldo"],
             ["ft","","99","FT 4-6"]
         ],
         lineupImg: "AddText_06-07-12.31.08_copy_210x410_1.png"
@@ -349,7 +348,20 @@
         lineupImg: "supercup-lineup.png"
       }
     ];
-    let currentFixtureIndex = 0;
+    function formatMinute(min) {
+        if (typeof min === 'string' && (min.startsWith('HT') || min.startsWith('FT'))) return min;
+        if (typeof min === 'number') {
+            return `${min}'`;
+        }
+        if (typeof min === 'string' && min.match(/^\d+\+\d+$/)) {
+            // e.g. "90+2"
+            return `${min}'`;
+        }
+        if (typeof min === 'string' && /^\d+$/.test(min)) {
+            return `${min}'`;
+        }
+        return min;
+    }
     function renderPlayerStats(stats) {
         return `
         <div style="overflow-x:auto;">
@@ -401,7 +413,7 @@
                         <div class="team-name">${fixture.awayName}</div>
                     </div>
                 </div>
-                <div class="toggle-buttons">
+                <div class="toggle-buttons" id="${fixtureId}">
                     <button class="toggle-btn active" onclick="showStats('${fixtureId}')">Match Stats</button>
                     <button class="toggle-btn" onclick="showLineup('${fixtureId}')">Team Lineup</button>
                 </div>
@@ -438,23 +450,28 @@
                             ${
                               fixture.events.map(ev => {
                                 const [type, team, minute, arg] = ev;
-                                if(type === "ht" || type === "ft") return '';
+                                if(type === "ht" || type === "ft") {
+                                    // Half/full time, show as result row
+                                    return `<div class="lineup-event-row" style="justify-content:center; color:#ffd700; font-weight:bold;">
+                                                <span class="lineup-event-minute" style="background:#ffd700; color:#191e33;">${type === "ht" ? "Half Time" : "Full Time"}</span>
+                                                <span style="margin-left:10px;">${arg}</span>
+                                            </div>`;
+                                }
                                 let action = "";
                                 let icon = "";
                                 if(type === "goal") {
-                                  action = "Goal";
-                                  icon = "";
+                                    action = "Goal";
                                 }
                                 else if(type === "sub_in") {
-                                  action = "Sub In";
-                                  icon = `<span class="icon-arrow-up"></span>`;
+                                    action = "Sub In";
+                                    icon = `<span class="icon-arrow-up"></span>`;
                                 }
                                 else if(type === "sub_out") {
-                                  action = "Sub Out";
-                                  icon = `<span class="icon-arrow-down"></span>`;
+                                    action = "Sub Out";
+                                    icon = `<span class="icon-arrow-down"></span>`;
                                 }
                                 else {
-                                  action = type.charAt(0).toUpperCase() + type.slice(1);
+                                    action = type.charAt(0).toUpperCase() + type.slice(1);
                                 }
                                 let indicator = '';
                                 if (team === 'home') {
@@ -463,9 +480,9 @@
                                     indicator = `<span class="player-indicator away">A</span>`;
                                 }
                                 return `<div class="lineup-event-row">
-                                  <span class="lineup-event-minute event-label">${minute}' Event ${icon}</span>
-                                  <span class="lineup-event-action">${action}</span>
-                                  <span class="lineup-event-player">${arg || ""}${indicator}</span>
+                                    <span class="lineup-event-minute">${formatMinute(minute)}</span>
+                                    <span class="lineup-event-action">${action} ${icon}</span>
+                                    <span class="lineup-event-player">${arg || ""}${indicator}</span>
                                 </div>`;
                               }).join("")
                             }
