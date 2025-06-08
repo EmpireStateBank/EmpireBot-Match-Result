@@ -93,9 +93,9 @@
         .team { display: flex; flex-direction: column; align-items: center; }
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px #ffd70044; }
+        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; }
         .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
-        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s; }
+        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
         .toggle-btn.active { background: #ffd700; color: #181818; }
         .stats-bar { margin-bottom: 24px; }
         .stat-row { display: flex; align-items: center; margin: 10px 0; }
@@ -106,7 +106,7 @@
         .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
         .stat-value { width: 42px; text-align: center; font-weight: bold; color: #fff; }
         .score-section { margin-top: 22px; text-align: center; }
-        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.12); margin-bottom: 6px; }
+        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.13);}
         .score-value { color: #fff; }
         .fixture-toggle-btn {
             display: block;
@@ -168,16 +168,17 @@
         .lineup-event-action { min-width: 58px; color: #63e6be; display: flex; align-items: center; gap: 4px; }
         .lineup-event-player { color: #fff; flex: 1; }
         .icon-arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid #2ecc40; display: inline-block; margin-right: 2px;}
-        .icon-arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid #e74c3c; display: inline-block; margin-right: 2px; }
-        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color: #ffd700; }
+        .icon-arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid #e74c3c; display: inline-block; margin-right: 2px;}
+        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color:#ffd700;}
         .player-indicator.away { background: #6d081b; color: #ffd700; }
+        /* CHANGED VENUE COLOR FROM #23272e TO #1e90ff (Dodger Blue) */
         .match-venue { 
             text-align: center; 
             font-size: 1.04rem; 
             font-weight: 600; 
-            color: #ffd700;
+            color: #fff;
             margin-bottom: 10px; 
-            background: #23272e; 
+            background: #1e90ff;
             padding: 6px 0; 
             border-radius: 6px; 
             box-shadow: 0 2px 8px #00c3ff44; 
@@ -205,7 +206,6 @@
         .possibility.home { background: #0a3773; color: #ffd700; }
         .possibility.draw { background: #434343; color: #00c3ff; }
         .possibility.away { background: #6d081b; color: #ffd700; }
-        /* --- Home and Away team-label styles changed from black to original colors --- */
         .team-label {
             font-weight: bold;
             font-size: 1rem;
@@ -214,14 +214,8 @@
             border-radius: 10px;
             background: #23272e;
         }
-        .team:first-child .team-label { /* Home */
-            background: #0a3773;
-            color: #ffd700;
-        }
-        .team:last-child .team-label { /* Away */
-            background: #6d081b;
-            color: #ffd700;
-        }
+        .team:first-child .team-label { background: #0a3773; color: #ffd700; }
+        .team:last-child .team-label { background: #6d081b; color: #ffd700; }
         @media (max-width: 800px) { .lineup-flex-wrap { flex-direction: column; } }
         @media (max-width: 480px) {
             .fixture-container, .player-stats-container, .header-block { width: 96vw !important; min-width: 0 !important; }
@@ -238,6 +232,11 @@
         <img src="AddText_06-04-10.32.55.png" alt="Header" class="header-img" id="header-img"/>
         <div class="sport-channel">SPORT CHANNEL</div>
     </div>
+    <!-- TEAM STAFF & CAPTAINS SECTION -->
+    <div class="player-stats-container" id="team-staff-block" style="display:none;">
+        <div class="player-stats-title">Team Officials & Captains</div>
+        <div id="team-staff-table-root"></div>
+    </div>
     <!-- PLAYER STATS SECTION -->
     <div class="player-stats-container" id="player-stats-block" style="display:none;">
         <button class="toggle-section-btn" id="toggle-player-stats-btn" aria-expanded="true" onclick="togglePlayerStats()">Hide Player Stats</button>
@@ -252,6 +251,37 @@
     <script>
     const loadingText = "UEC/QIC 16 Abasi Orok";
     const typingDelay = 90;
+
+    // TEAM STAFF & CAPTAINS DATA
+    const teamStaff = [
+        { role: "Head Coach", name: "Coach Daniel Okon" },
+        { role: "Assistant Coach", name: "Coach Peter Ekanem" },
+        { role: "Team Captain", name: "Captain Eyo" },
+        { role: "Assistant Captain", name: "Samuel Udoh" }
+    ];
+
+    function renderTeamStaff(staffArr) {
+        return `
+        <div style="overflow-x:auto;">
+            <table class="player-stats-table">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${staffArr.map(row => `
+                        <tr>
+                            <td class="player-position">${row.role}</td>
+                            <td class="player-name">${row.name}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+        `;
+    }
     function typeLoadingText(text, el, cb) {
         let idx = 0;
         function type() {
@@ -589,8 +619,13 @@
         typeLoadingText(loadingText, document.getElementById('typing-text'), function() {
             setTimeout(function() {
                 document.getElementById('header-block').style.display = '';
+                // Render team staff and show
+                document.getElementById('team-staff-table-root').innerHTML = renderTeamStaff(teamStaff);
+                document.getElementById('team-staff-block').style.display = '';
+                // Render player stats and show
                 document.getElementById('player-stats-table-root').innerHTML = renderPlayerStats(playerStatsArr);
                 document.getElementById('player-stats-block').style.display = '';
+                // Render fixtures
                 let html = "";
                 for(let i=0; i<fixtures.length; ++i) {
                     html += renderFixture(fixtures[i], i, i===0);
