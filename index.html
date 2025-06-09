@@ -29,6 +29,47 @@
         .sport-channel {
             text-align: center; color: #00c3ff; font-size: 1.16rem; font-weight: bold; margin-bottom: 18px; letter-spacing: 2px;
         }
+        /* Training Info Card */
+        .training-info-card {
+            max-width: 420px;
+            margin: 18px auto 0 auto;
+            background: #23272e;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px #00c3ff33;
+            color: #fff;
+            padding: 16px 24px 16px 24px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 1.12rem;
+            position: relative;
+            border-left: 8px solid #ffd700;
+        }
+        .training-info-title {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        .training-info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .training-info-label {
+            color: #00c3ff;
+            font-weight: 600;
+            min-width: 90px;
+            letter-spacing: 1px;
+        }
+        .training-info-value {
+            color: #fff;
+            font-weight: 500;
+        }
+        /* --- existing styles below --- */
         .player-stats-container {
             max-width: 800px;
             margin: 24px auto 18px auto;
@@ -93,9 +134,9 @@
         .team { display: flex; flex-direction: column; align-items: center; }
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center; }
+        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content:center;}
         .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
-        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;}
         .toggle-btn.active { background: #ffd700; color: #181818; }
         .stats-bar { margin-bottom: 24px; }
         .stat-row { display: flex; align-items: center; margin: 10px 0; }
@@ -169,9 +210,8 @@
         .lineup-event-player { color: #fff; flex: 1; }
         .icon-arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid #2ecc40; display: inline-block; margin-right: 2px;}
         .icon-arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid #e74c3c; display: inline-block; margin-right: 2px;}
-        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color:#ffd700;}
+        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color:#ffd700; }
         .player-indicator.away { background: #6d081b; color: #ffd700; }
-        /* CHANGED VENUE COLOR FROM #23272e TO #1e90ff (Dodger Blue) */
         .match-venue { 
             text-align: center; 
             font-size: 1.04rem; 
@@ -218,7 +258,7 @@
         .team:last-child .team-label { background: #6d081b; color: #ffd700; }
         @media (max-width: 800px) { .lineup-flex-wrap { flex-direction: column; } }
         @media (max-width: 480px) {
-            .fixture-container, .player-stats-container, .header-block { width: 96vw !important; min-width: 0 !important; }
+            .fixture-container, .player-stats-container, .header-block, .training-info-card { width: 96vw !important; min-width: 0 !important; }
         }
     </style>
 </head>
@@ -231,6 +271,22 @@
     <div class="header-block" id="header-block" style="display:none;">
         <img src="AddText_06-04-10.32.55.png" alt="Header" class="header-img" id="header-img"/>
         <div class="sport-channel">SPORT CHANNEL</div>
+    </div>
+    <!-- TRAINING INFO INDICATOR -->
+    <div class="training-info-card" id="training-info-card" style="display:none;">
+        <div class="training-info-title">Training Information</div>
+        <div class="training-info-row">
+            <span class="training-info-label">Days:</span>
+            <span class="training-info-value" id="training-days"></span>
+        </div>
+        <div class="training-info-row">
+            <span class="training-info-label">Venue:</span>
+            <span class="training-info-value" id="training-venue"></span>
+        </div>
+        <div class="training-info-row">
+            <span class="training-info-label">Time:</span>
+            <span class="training-info-value" id="training-time"></span>
+        </div>
     </div>
     <!-- TEAM STAFF & CAPTAINS SECTION -->
     <div class="player-stats-container" id="team-staff-block" style="display:none;">
@@ -251,6 +307,13 @@
     <script>
     const loadingText = "UEC/QIC 16 Abasi Orok";
     const typingDelay = 90;
+
+    // TRAINING INFO DATA (EDITABLE)
+    const trainingInfo = {
+        days: "Monday, Wednesday, Friday",
+        venue: "Piaco Comprehensive College Field",
+        time: "4:30 PM - 6:30 PM"
+    };
 
     // TEAM STAFF & CAPTAINS DATA
     const teamStaff = [
@@ -605,6 +668,11 @@
         typeLoadingText(loadingText, document.getElementById('typing-text'), function() {
             setTimeout(function() {
                 document.getElementById('header-block').style.display = '';
+                // Show training info
+                document.getElementById('training-days').textContent = trainingInfo.days;
+                document.getElementById('training-venue').textContent = trainingInfo.venue;
+                document.getElementById('training-time').textContent = trainingInfo.time;
+                document.getElementById('training-info-card').style.display = '';
                 // Render team staff and show
                 document.getElementById('team-staff-table-root').innerHTML = renderTeamStaff(teamStaff);
                 document.getElementById('team-staff-block').style.display = '';
