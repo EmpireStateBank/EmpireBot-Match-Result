@@ -29,45 +29,62 @@
         .sport-channel {
             text-align: center; color: #00c3ff; font-size: 1.16rem; font-weight: bold; margin-bottom: 18px; letter-spacing: 2px;
         }
-        /* Training Info Card */
-        .training-info-card {
-            max-width: 420px;
-            margin: 18px auto 0 auto;
-            background: #23272e;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px #00c3ff33;
-            color: #fff;
-            padding: 16px 24px 16px 24px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 1.12rem;
-            position: relative;
+        /* Modern Training Info Layout */
+        .training-layout-wrapper {
+            background: linear-gradient(135deg, #23272e 75%, #00c3ff22 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 195, 255, 0.18), 0 1.5px 12px #0009;
+            padding: 32px 38px;
+            max-width: 400px;
+            width: 94vw;
+            margin: 24px auto 0 auto;
             border-left: 8px solid #ffd700;
+            display: block;
         }
-        .training-info-title {
+        .training-title {
             color: #ffd700;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 8px #23272e77;
         }
-        .training-info-row {
+        .training-row {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            align-items: flex-start;
+            padding: 13px 0;
+            border-bottom: 1px solid #222a35;
+            gap: 12px;
         }
-        .training-info-label {
+        .training-row:last-child {
+            border-bottom: none;
+        }
+        .training-label {
             color: #00c3ff;
             font-weight: 600;
-            min-width: 90px;
+            min-width: 80px;
+            font-size: 1.05rem;
+            flex-shrink: 0;
             letter-spacing: 1px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
         }
-        .training-info-value {
+        .training-value {
             color: #fff;
+            font-size: 1.09rem;
             font-weight: 500;
+            flex: 1;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+        .training-icon {
+            width: 26px;
+            height: 26px;
+            vertical-align: middle;
+            filter: drop-shadow(0 1px 4px #00c3ff44);
         }
         /* --- existing styles below --- */
         .player-stats-container {
@@ -134,9 +151,9 @@
         .team { display: flex; flex-direction: column; align-items: center; }
         .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
         .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content:center;}
+        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center;}
         .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
-        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;}
+        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.18s, color 0.18s;}
         .toggle-btn.active { background: #ffd700; color: #181818; }
         .stats-bar { margin-bottom: 24px; }
         .stat-row { display: flex; align-items: center; margin: 10px 0; }
@@ -258,7 +275,11 @@
         .team:last-child .team-label { background: #6d081b; color: #ffd700; }
         @media (max-width: 800px) { .lineup-flex-wrap { flex-direction: column; } }
         @media (max-width: 480px) {
-            .fixture-container, .player-stats-container, .header-block, .training-info-card { width: 96vw !important; min-width: 0 !important; }
+            .fixture-container, .player-stats-container, .header-block, .training-layout-wrapper { width: 96vw !important; min-width: 0 !important; }
+            .training-layout-wrapper { padding: 18px 6vw; }
+            .training-title { font-size: 1.15rem; }
+            .training-label { font-size: 0.97rem; }
+            .training-value { font-size: 0.98rem; }
         }
     </style>
 </head>
@@ -272,20 +293,26 @@
         <img src="AddText_06-04-10.32.55.png" alt="Header" class="header-img" id="header-img"/>
         <div class="sport-channel">SPORT CHANNEL</div>
     </div>
-    <!-- TRAINING INFO INDICATOR -->
-    <div class="training-info-card" id="training-info-card" style="display:none;">
-        <div class="training-info-title">Training Information</div>
-        <div class="training-info-row">
-            <span class="training-info-label">Days:</span>
-            <span class="training-info-value" id="training-days"></span>
+    <!-- MODERN TRAINING INFO LAYOUT -->
+    <div class="training-layout-wrapper" id="training-layout-wrapper">
+        <div class="training-title">Training Information</div>
+        <div class="training-row">
+            <span class="training-label">
+                <img class="training-icon" src="https://cdn-icons-png.flaticon.com/512/61/61088.png" alt="Days"> Days:
+            </span>
+            <span class="training-value" id="training-days"></span>
         </div>
-        <div class="training-info-row">
-            <span class="training-info-label">Venue:</span>
-            <span class="training-info-value" id="training-venue"></span>
+        <div class="training-row">
+            <span class="training-label">
+                <img class="training-icon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Venue"> Venue:
+            </span>
+            <span class="training-value" id="training-venue"></span>
         </div>
-        <div class="training-info-row">
-            <span class="training-info-label">Time:</span>
-            <span class="training-info-value" id="training-time"></span>
+        <div class="training-row">
+            <span class="training-label">
+                <img class="training-icon" src="https://cdn-icons-png.flaticon.com/512/726/726476.png" alt="Time"> Time:
+            </span>
+            <span class="training-value" id="training-time"></span>
         </div>
     </div>
     <!-- TEAM STAFF & CAPTAINS SECTION -->
@@ -312,7 +339,7 @@
     const trainingInfo = {
         days: "Saturdays and Sundays",
         venue: "Government Technical College. Mayne Avenue, Calabar South",
-        time: "Saturdays by 07:00 - 11:00/Sundays by 03:00 - 18:00"
+        time: "Saturdays by 07:00 - 11:00<br>Sundays by 03:00 - 18:00"
     };
 
     // TEAM STAFF & CAPTAINS DATA
@@ -668,11 +695,10 @@
         typeLoadingText(loadingText, document.getElementById('typing-text'), function() {
             setTimeout(function() {
                 document.getElementById('header-block').style.display = '';
-                // Show training info
-                document.getElementById('training-days').textContent = trainingInfo.days;
-                document.getElementById('training-venue').textContent = trainingInfo.venue;
-                document.getElementById('training-time').textContent = trainingInfo.time;
-                document.getElementById('training-info-card').style.display = '';
+                // Show updated training info layout
+                document.getElementById('training-days').innerHTML = trainingInfo.days;
+                document.getElementById('training-venue').innerHTML = trainingInfo.venue;
+                document.getElementById('training-time').innerHTML = trainingInfo.time;
                 // Render team staff and show
                 document.getElementById('team-staff-table-root').innerHTML = renderTeamStaff(teamStaff);
                 document.getElementById('team-staff-block').style.display = '';
