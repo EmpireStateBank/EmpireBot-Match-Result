@@ -2,721 +2,260 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Football Fixtures</title>
-    <meta name="viewport" content="width=1024, user-scalable=yes">
+    <title>Transaction History - PIN Protected</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { margin: 0; background: #141414; }
-        #loading-overlay {
-            position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.88);
-            display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 10000;
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e9f7ef 0%, #d6eaf8 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
-        #loading-overlay img { width: 80px; height: 80px; margin-bottom: 24px; display: block; }
-        #typing-text {
-            color: #fff; font-size: 1.15rem; font-weight: 600; letter-spacing: 1px;
-            min-height: 28px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            border-right: 2px solid #ffd700; white-space: pre; overflow: hidden;
-        }
-        .header-block {
-            max-width: 800px;
-            margin: 35px auto 0 auto;
-            text-align: center;
-        }
-        .header-img {
-            width: 100%; max-width: 220px; display: block; margin: 0 auto 18px auto;
-            border-radius: 12px; box-shadow: 0 2px 16px #222;
-        }
-        .sport-channel {
-            text-align: center; color: #00c3ff; font-size: 1.16rem; font-weight: bold; margin-bottom: 18px; letter-spacing: 2px;
-        }
-        /* Modern Training Info Layout */
-        .training-layout-wrapper {
-            background: linear-gradient(135deg, #23272e 75%, #00c3ff22 100%);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 195, 255, 0.18), 0 1.5px 12px #0009;
-            padding: 32px 38px;
+        .container {
             max-width: 400px;
-            width: 94vw;
-            margin: 24px auto 0 auto;
-            border-left: 8px solid #ffd700;
-            display: block;
-        }
-        .training-title {
-            color: #ffd700;
-            font-size: 1.45rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 8px #23272e77;
-        }
-        .training-row {
-            display: flex;
-            align-items: flex-start;
-            padding: 13px 0;
-            border-bottom: 1px solid #222a35;
-            gap: 12px;
-        }
-        .training-row:last-child {
-            border-bottom: none;
-        }
-        .training-label {
-            color: #00c3ff;
-            font-weight: 600;
-            min-width: 80px;
-            font-size: 1.05rem;
-            flex-shrink: 0;
-            letter-spacing: 1px;
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
-        .training-value {
-            color: #fff;
-            font-size: 1.09rem;
-            font-weight: 500;
-            flex: 1;
-            word-break: break-word;
-            line-height: 1.6;
-        }
-        .training-icon {
-            width: 26px;
-            height: 26px;
-            vertical-align: middle;
-            filter: drop-shadow(0 1px 4px #00c3ff44);
-        }
-        /* --- existing styles below --- */
-        .player-stats-container {
-            max-width: 800px;
-            margin: 24px auto 18px auto;
-            background: #23272e;
-            border-radius: 16px;
-            padding: 28px 18px 28px 18px;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.34);
-        }
-        .player-stats-title {
-            color: #ffd700;
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 18px;
-            letter-spacing: 1.5px;
-        }
-        .toggle-section-btn {
-            display: block;
-            margin: 0 auto 16px auto;
-            background: #ffd700;
-            color: #181818;
-            font-weight: bold;
-            padding: 10px 22px;
-            border: none;
-            border-radius: 24px;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 2px 10px #0004;
-            transition: background 0.2s;
-        }
-        .toggle-section-btn[aria-expanded="true"] { background: #2ecc40; color: #fff; }
-        .toggle-section-btn[aria-expanded="false"] { background: #ffd700; color: #181818; }
-        .player-stats-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto 10px auto;
-            background: transparent;
-        }
-        .player-stats-table th {
-            background: #ffd700;
-            color: #181818;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-bottom: 3px solid #222;
-        }
-        .player-stats-table td {
-            color: #fff;
-            font-size: 1rem;
-            background: #24282f;
-        }
-        .player-stats-table tr:nth-child(even) td { background: #31363f; }
-        .player-number { color: #ffd700 !important; font-weight: bold; }
-        .player-name { color: #00c3ff !important; font-weight: bold; }
-        .player-position { color: #63e6be !important; font-weight: bold; }
-        .player-goals { color: #2ecc40 !important; font-weight: bold; }
-        .player-assists { color: #ff9800 !important; font-weight: bold; }
-        .fixture-container { max-width: 600px; margin: 48px auto; background: #181818; border-radius: 14px; box-shadow: 0 4px 32px rgba(0,0,0,0.4); padding: 32px 18px 48px 18px; position:relative;}
-        .fixture-block { margin-bottom: 32px; background: #1f232a; border-radius: 12px; box-shadow: 0 2px 10px #0005; position:relative; }
-        .fixture-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 9px; text-align: center; color: #ffd700; letter-spacing: 1px; }
-        .fixture-time { text-align: center; margin-bottom: 28px; font-size: 1.1rem; color: #00c3ff; }
-        .teams-row { display: flex; justify-content: center; align-items: center; gap: 48px; margin-bottom: 22px; }
-        .team { display: flex; flex-direction: column; align-items: center; }
-        .team img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid #222; background: #272727; margin-bottom: 7px; }
-        .team-name { font-size: 1.12rem; font-weight: 600; color: #fff; text-align: center; margin-top: 2px; max-width: 130px; }
-        .vs { font-size: 2.4rem; font-weight: bold; color: #ffd700; margin: 0 18px; background: #000; border-radius: 50%; width: 74px; height: 74px; display: flex; align-items: center; justify-content: center;}
-        .toggle-buttons { display: flex; justify-content: center; gap: 14px; margin-bottom: 24px; }
-        .toggle-btn { background: #23272e; border: 2px solid #ffd700; color: #ffd700; padding: 7px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.18s, color 0.18s;}
-        .toggle-btn.active { background: #ffd700; color: #181818; }
-        .stats-bar { margin-bottom: 24px; }
-        .stat-row { display: flex; align-items: center; margin: 10px 0; }
-        .stat-label { width: 110px; text-align: center; color: #ffd700; font-weight: 600; font-size: 1rem; }
-        .stat-bar-outer { flex: 1; display: flex; align-items: center; }
-        .stat-bar-inner { height: 16px; border-radius: 8px; margin: 0 8px; background: #23272e; position: relative; flex: 1; display: flex; }
-        .stat-bar-home { background: linear-gradient(90deg, #0a3773 80%, #23272e 100%); border-top-left-radius: 8px; border-bottom-left-radius: 8px; height: 100%; }
-        .stat-bar-away { background: linear-gradient(270deg, #6d081b 80%, #23272e 100%); border-top-right-radius: 8px; border-bottom-right-radius: 8px; height: 100%; }
-        .stat-value { width: 42px; text-align: center; font-weight: bold; color: #fff; }
-        .score-section { margin-top: 22px; text-align: center; }
-        .score-inner { display: inline-block; background: #23272e; padding: 8px 22px; border-radius: 8px; font-size: 1.25rem; font-weight: 700; color: #ffd700; box-shadow: 0 2px 8px rgba(0,0,0,0.13);}
-        .score-value { color: #fff; }
-        .fixture-toggle-btn {
-            display: block;
-            width: 100%;
-            background: #ffd700;
-            color: #181818;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px 12px 0 0;
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 13px 0;
-            margin-bottom: 0;
-            transition: background 0.2s;
-        }
-        .fixture-toggle-btn[aria-expanded="true"] { background: #2ecc40; color: #fff; }
-        .fixture-toggle-btn[aria-expanded="false"] { background: #ffd700; color: #181818; }
-        .fixture-content-inner { padding: 18px 8px 8px 8px; }
-        .lineup-section { display: flex; justify-content: center; align-items: flex-start; min-height: 410px; }
-        .lineup-flex-wrap { display: flex; flex-direction: row; gap: 0; }
-        .lineup-big-img {
-            position: relative; background: #191e33; border: 3px solid #ffd700; border-radius: 24px 0 0 24px;
-            width: 370px; min-height: 410px; min-width: 210px; display: flex; flex-direction: column; align-items: center;
-            overflow: hidden; box-shadow: 0 4px 32px rgba(0,0,0,0.4);
-        }
-        .lineup-big-img img.lineup-big { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; position: absolute; left: 0; top: 0; z-index: 1; }
-        .lineup-label-on-img {
+            background: #fff;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.11);
             position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #ffd700;
-            color: #191e33;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        h2 {
+            text-align: center;
+            color: #00796b;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a237e;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #aed6f1;
+            border-radius: 6px;
+            font-size: 18px;
+            transition: border 0.2s;
+        }
+        input[type="password"]:focus {
+            border: 2px solid #00796b;
+            outline: none;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 11px;
+            background: #00796b;
+            color: #fff;
+            border: none;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 1.1rem;
-            padding: 7px 15px;
-            z-index: 2;
-            box-shadow: 0 2px 10px #0004;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
         }
-        .lineup-events-list {
-            background: rgba(20,20,30,0.88); border-radius: 0 24px 24px 0; padding: 18px 12px 12px 18px; box-sizing: border-box; z-index: 3;
-            min-height: 410px; display: flex; flex-direction: column; justify-content: flex-start; width: 220px;
+        input[type="submit"]:hover {
+            background: #004d40;
         }
-        .lineup-event-row { display: flex; gap: 12px; align-items: center; font-size: 1.09rem; color: #ffd700; border-bottom: 1px solid #444; padding: 4px 0; }
-        .lineup-event-minute {
-            min-width: 84px;
-            color: #fff;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: #1a237e;
+        .error {
+            color: #b00;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .history-table-wrapper {
+            max-height: 220px;
+            overflow-y: auto;
+            margin-top: 20px;
             border-radius: 8px;
-            padding: 3px 8px;
-            font-size: 1em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            background: #fafafa;
         }
-        .lineup-event-minute.lineup-label { background: #ffd700; color: #191e33; }
-        .lineup-event-minute.event-label { background: #00c3ff; color: #191e33; }
-        .lineup-event-action { min-width: 58px; color: #63e6be; display: flex; align-items: center; gap: 4px; }
-        .lineup-event-player { color: #fff; flex: 1; }
-        .icon-arrow-up { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 16px solid #2ecc40; display: inline-block; margin-right: 2px;}
-        .icon-arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 16px solid #e74c3c; display: inline-block; margin-right: 2px;}
-        .player-indicator { display: inline-block; font-size: 0.72em; font-weight: 700; margin-left: 6px; padding: 1px 5px; border-radius: 7px; vertical-align: middle; background: #0a3773; color:#ffd700; }
-        .player-indicator.away { background: #6d081b; color: #ffd700; }
-        .match-venue { 
-            text-align: center; 
-            font-size: 1.04rem; 
-            font-weight: 600; 
-            color: #fff;
-            margin-bottom: 10px; 
-            background: #1e90ff;
-            padding: 6px 0; 
-            border-radius: 6px; 
-            box-shadow: 0 2px 8px #00c3ff44; 
+        /* Custom scrollbar styles */
+        .history-table-wrapper::-webkit-scrollbar {
+            width: 8px;
         }
-        .match-possibility-title { 
-            text-align: center; 
-            font-weight: 600; 
-            color: #ffd700; 
-            margin-bottom: 8px; 
+        .history-table-wrapper::-webkit-scrollbar-thumb {
+            background: #aed6f1;
+            border-radius: 8px;
         }
-        .match-possibility-bar { display: flex; justify-content: center; gap: 16px; margin-top: 7px; }
-        .possibility { 
-            padding: 7px 16px; 
-            border-radius: 7px; 
-            font-size: 1.04rem; 
-            text-align: center; 
-            font-weight: 600; 
-            background: #23272e; 
-            color: #ffd700; 
-            border: 1px solid #ffd700;
+        .history-table-wrapper::-webkit-scrollbar-track {
+            background: #eafaf1;
+            border-radius: 8px;
         }
-        .possibility.green { background: #2ecc40 !important; color: #fff !important; border: none;}
-        .possibility.yellow { background: #ffd700 !important; color: #222 !important; border: none;}
-        .possibility.red { background: #e74c3c !important; color: #fff !important; border: none;}
-        .possibility.home { background: #0a3773; color: #ffd700; }
-        .possibility.draw { background: #434343; color: #00c3ff; }
-        .possibility.away { background: #6d081b; color: #ffd700; }
-        .team-label {
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fafafa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .history-table th, .history-table td {
+            border: 1px solid #e1e1e1;
+            padding: 10px 6px;
+            text-align: left;
+        }
+        .history-table th {
+            background: #aed6f1;
+            color: #1a237e;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .history-table td {
+            color: #333;
+        }
+        .history-table tr:nth-child(even) td {
+            background: #eafaf1;
+        }
+        .deposit {
+            color: #388e3c;
             font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 4px;
-            padding: 3px 15px;
-            border-radius: 10px;
-            background: #23272e;
         }
-        .team:first-child .team-label { background: #0a3773; color: #ffd700; }
-        .team:last-child .team-label { background: #6d081b; color: #ffd700; }
-        @media (max-width: 800px) { .lineup-flex-wrap { flex-direction: column; } }
-        @media (max-width: 480px) {
-            .fixture-container, .player-stats-container, .header-block, .training-layout-wrapper { width: 96vw !important; min-width: 0 !important; }
-            .training-layout-wrapper { padding: 18px 6vw; }
-            .training-title { font-size: 1.15rem; }
-            .training-label { font-size: 0.97rem; }
-            .training-value { font-size: 0.98rem; }
+        .withdrawal {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        .logout-btn {
+            margin-top: 20px;
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover {
+            background: #b71c1c;
+        }
+        @media (max-width: 500px) {
+            .container {
+                max-width: 98vw;
+                padding: 12px;
+            }
+            .history-table th, .history-table td {
+                font-size: 15px;
+                padding: 7px 3px;
+            }
+            .history-table-wrapper {
+                max-height: 150px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="loading-overlay">
-        <img src="AddText_06-04-10.32.55.png" alt="Loading..." />
-        <span id="typing-text"></span>
-    </div>
-    <!-- HEADER IMAGE AND SPORT CHANNEL -->
-    <div class="header-block" id="header-block" style="display:none;">
-        <img src="AddText_06-04-10.32.55.png" alt="Header" class="header-img" id="header-img"/>
-        <div class="sport-channel">SPORT CHANNEL</div>
-    </div>
-    <!-- MODERN TRAINING INFO LAYOUT -->
-    <div class="training-layout-wrapper" id="training-layout-wrapper">
-        <div class="training-title">Training Information</div>
-        <div class="training-row">
-            <span class="training-label">
-                <img class="training-icon" src="https://cdn-icons-png.flaticon.com/512/61/61088.png" alt="Days"> Days:
-            </span>
-            <span class="training-value" id="training-days"></span>
+    <div class="container" id="app">
+        <h2>Transaction History</h2>
+        <div id="login-section">
+            <form id="pin-form">
+                <div class="form-group">
+                    <label for="pin-input">Enter your PIN:</label>
+                    <input type="password" id="pin-input" maxlength="6" required autocomplete="off" />
+                </div>
+                <input type="submit" value="View History" />
+                <div id="error-message" class="error" style="display:none;"></div>
+            </form>
         </div>
-        <div class="training-row">
-            <span class="training-label">
-                <img class="training-icon" src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Venue"> Venue:
-            </span>
-            <span class="training-value" id="training-venue"></span>
+        <div id="history-section" style="display:none;">
+            <h3 style="color: #1a237e;">Your Transactions</h3>
+            <div class="history-table-wrapper">
+                <table class="history-table" id="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Transactions will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <button class="logout-btn" id="logout-btn">Logout</button>
         </div>
-        <div class="training-row">
-            <span class="training-label">
-                <img class="training-icon" src="https://cdn-icons-png.flaticon.com/512/726/726476.png" alt="Time"> Time:
-            </span>
-            <span class="training-value" id="training-time"></span>
-        </div>
-    </div>
-    <!-- TEAM STAFF & CAPTAINS SECTION -->
-    <div class="player-stats-container" id="team-staff-block" style="display:none;">
-        <div class="player-stats-title">Team Officials & Captains</div>
-        <div id="team-staff-table-root"></div>
-    </div>
-    <!-- PLAYER STATS SECTION -->
-    <div class="player-stats-container" id="player-stats-block" style="display:none;">
-        <button class="toggle-section-btn" id="toggle-player-stats-btn" aria-expanded="true" onclick="togglePlayerStats()">Hide Player Stats</button>
-        <div class="player-stats-title">Player Stats</div>
-        <div id="player-stats-table-root"></div>
-    </div>
-    <!-- FIXTURES SECTION -->
-    <div class="fixture-container" id="fixture-content" style="display:none;">
-        <div id="fixtures-root"></div>
-        <div class="empty-space"></div>
     </div>
     <script>
-    const loadingText = "UEC/QIC 16 Abasi Orok";
-    const typingDelay = 90;
+        // Example transaction data keyed by PIN.
+        // In production, this would come from a backend/database,
+        // and PINs must be securely handled.
+        const transactionsByPin = {
+            "1234": [
+                { date: "2025-07-20", type: "Deposit", amount: 500, description: "Salary" },
+                { date: "2025-07-21", type: "Withdrawal", amount: 50, description: "Groceries" },
+                { date: "2025-07-22", type: "Deposit", amount: 100, description: "Refund" },
+                { date: "2025-07-23", type: "Withdrawal", amount: 30, description: "Snacks" },
+                { date: "2025-07-24", type: "Deposit", amount: 200, description: "Allowance" },
+                { date: "2025-07-25", type: "Withdrawal", amount: 25, description: "Transport" }
+            ],
+            "5678": [
+                { date: "2025-07-18", type: "Deposit", amount: 200, description: "Gift" },
+                { date: "2025-07-19", type: "Withdrawal", amount: 20, description: "Transport" }
+            ]
+        };
 
-    // TRAINING INFO DATA (EDITABLE)
-    const trainingInfo = {
-        days: "Saturdays and Sundays",
-        venue: "Government Technical College. Mayne Avenue, Calabar South",
-        time: "Saturdays by 07:00 - 11:00<br>Sundays by 03:00 - 18:00"
-    };
+        const NairaSign = "\u20A6";
+        const pinForm = document.getElementById('pin-form');
+        const pinInput = document.getElementById('pin-input');
+        const errorMessage = document.getElementById('error-message');
+        const loginSection = document.getElementById('login-section');
+        const historySection = document.getElementById('history-section');
+        const historyTableBody = document.getElementById('history-table').querySelector('tbody');
+        const logoutBtn = document.getElementById('logout-btn');
 
-    // TEAM STAFF & CAPTAINS DATA
-    const teamStaff = [
-        { role: "Head Coach", name: "Akanimo John" },
-        { role: "Assistant Coach", name: "Aniekan Kiddy" },
-        { role: "Team Captain", name: "Kizz" },
-        { role: "Assistant Captain", name: "Ronaldo" }
-    ];
+        let currentPin = null;
 
-    function renderTeamStaff(staffArr) {
-        return `
-        <div style="overflow-x:auto;">
-            <table class="player-stats-table">
-                <thead>
-                    <tr>
-                        <th>Role</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${staffArr.map(row => `
-                        <tr>
-                            <td class="player-position">${row.role}</td>
-                            <td class="player-name">${row.name}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        </div>
-        `;
-    }
-    function typeLoadingText(text, el, cb) {
-        let idx = 0;
-        function type() {
-            el.textContent = text.slice(0, idx + 1);
-            idx++;
-            if (idx < text.length) setTimeout(type, typingDelay);
-            else if (cb) cb();
-        }
-        type();
-    }
-    const playerStatsArr = [
-        { number: 1, name: "Joseph", position: "Goalkeeper", goals: 0, assists: 0 },
-        { number: 2, name: "Christian Sunday", position: "Right Back", goals: 1, assists: 1 },
-        { number: 3, name: "Success", position: "Left Back", goals: 0, assists: 0 },
-        { number: 4, name: "Victory Wisdom", position: "Center Back", goals: 0, assists: 0 },
-        { number: 5, name: "Victor Ezekiel", position: "Center Back", goals: 0, assists: 0 },
-        { number: 6, name: "Luck", position: "Central Midfield", goals: 0, assists: 0 },
-        { number: 7, name: "Ronaldo", position: "Right Winger", goals: 2, assists: 1 },
-        { number: 8, name: "NN", position: "Central Midfield", goals: 0, assists: 0 },
-        { number: 9, name: "Kizz", position: "Striker", goals: 3, assists: 0 },
-        { number: 10, name: "NN", position: "Central Forward", goals: 0, assists: 0 },
-        { number: 11, name: "NN", position: "Left winger", goals: 0, assists: 0 }
-    ];
-    const fixtures = [
-      {
-        title: "Youth Friendly Football Match",
-        time: "Friday, June 6, 2025 • 08:00 AM",
-        homeName: "Divine God's Mercy Academy",
-        homeImg: "AddText_06-07-12.32.41.png",
-        awayName: "The Rock FC",
-        awayImg: "AddText_06-04-01.09.17.png",
-        stats: [
-            ["Corner Kicks",4,6],
-            ["Shots",10,14],
-            ["Dangerous Attack",9,19],
-            ["Ball Possession",70,30],
-            ["Yellow Cards",3,2],
-            ["Red Cards",1,0]
-        ],
-        halfTimeScore: "2-2",
-        fullTimeScore: "4-6",
-        venue: "Piaco Comprehensive College",
-        possibility: [
-            ["home", "Home 60%"],
-            ["draw", "Draw 30%"],
-            ["away", "Away 10%"]
-        ],
-        events: [
-            ["goal","away",15,"Paul"],
-            ["goal","home",26,"Digma"],
-            ["goal","away",40,"Christian"],
-            ["goal","home","45+6","Digma"],
-            ["ht","","48","HT 2-2"],
-            ["goal","home",52,"Digma"],
-            ["goal","away",60,"Ronaldo"],
-            ["goal","home",65,"Digma"],
-            ["sub_out","away",70,"Joseph"],
-            ["sub_in","away",70,"captain"],
-            ["goal","away",76,"Paul"],
-            ["goal","away",85,"Paul"],
-            ["goal","away","90+2","Ronaldo"],
-            ["ft","","99","FT 4-6"]
-        ],
-        lineupImg: "AddText_06-07-12.31.08_copy_210x410_1.png"
-      },
-      {
-        title: "Super Cup Final",
-        time: "Saturday, July 12, 2025 • 06:00 PM",
-        homeName: "Eagles FC",
-        homeImg: "eagles.png",
-        awayName: "Lions FC",
-        awayImg: "lions.png",
-        stats: [
-          ["Corner Kicks", 5, 3],
-          ["Shots", 8, 9],
-          ["Dangerous Attack", 14, 12],
-          ["Ball Possession", 55, 45],
-          ["Yellow Cards", 2, 2],
-          ["Red Cards", 0, 1]
-        ],
-        halfTimeScore: "1-0",
-        fullTimeScore: "2-1",
-        venue: "National Stadium",
-        possibility: [
-          ["home", "Home 50%"],
-          ["draw", "Draw 30%"],
-          ["away", "Away 20%"]
-        ],
-        events: [
-          ["goal", "home", 23, "John"],
-          ["goal", "away", 49, "Mike"],
-          ["sub_in", "home", 60, "Kalu"],
-          ["goal", "home", 77, "Ayo"],
-          ["ft", "", 90, "FT 2-1"]
-        ],
-        lineupImg: "supercup-lineup.png"
-      }
-    ];
-    function formatMinute(min) {
-        if (typeof min === 'string' && (min.startsWith('HT') || min.startsWith('FT'))) return min;
-        if (typeof min === 'number') {
-            return `${min}'`;
-        }
-        if (typeof min === 'string' && min.match(/^\d+\+\d+$/)) {
-            return `${min}'`;
-        }
-        if (typeof min === 'string' && /^\d+$/.test(min)) {
-            return `${min}'`;
-        }
-        return min;
-    }
-    function renderPlayerStats(stats) {
-        return `
-        <div style="overflow-x:auto;">
-        <table class="player-stats-table">
-            <thead>
-                <tr>
-                    <th>Number</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Goals</th>
-                    <th>Assists</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${stats.map(row => `
-                    <tr>
-                        <td class="player-number">${row.number}</td>
-                        <td class="player-name">${row.name}</td>
-                        <td class="player-position">${row.position}</td>
-                        <td class="player-goals">${row.goals}</td>
-                        <td class="player-assists">${row.assists}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-        </div>
-        `;
-    }
-    function renderFixture(fixture, idx, expanded=true) {
-        const fixtureId = `fixture${idx+1}`;
-        return `
-        <div class="fixture-block" id="block-${fixtureId}">
-            <button class="fixture-toggle-btn" aria-expanded="${expanded}" onclick="toggleFixture('${fixtureId}')">
-                ${expanded ? "Hide" : "Show"} Fixture: ${fixture.title}
-            </button>
-            <div id="${fixtureId}-content" class="fixture-content-inner" style="${expanded ? "" : "display:none;"}">
-                <div class="fixture-title">${fixture.title}</div>
-                <div class="fixture-time">${fixture.time}</div>
-                <div class="teams-row">
-                    <div class="team">
-                        <div class="team-label">Home</div>
-                        <img src="${fixture.homeImg}" alt="Team A">
-                        <div class="team-name">${fixture.homeName}</div>
-                    </div>
-                    <div class="vs">VS</div>
-                    <div class="team">
-                        <div class="team-label">Away</div>
-                        <img src="${fixture.awayImg}" alt="Team B">
-                        <div class="team-name">${fixture.awayName}</div>
-                    </div>
-                </div>
-                <div class="toggle-buttons" id="${fixtureId}">
-                    <button class="toggle-btn active" onclick="showStats('${fixtureId}')">Match Stats</button>
-                    <button class="toggle-btn" onclick="showLineup('${fixtureId}')">Team Lineup</button>
-                </div>
-                <div class="stats-bar" id="${fixtureId}-stats">
-                ${
-                    fixture.stats.map(row => {
-                        const [label, home, away] = row;
-                        const total = home + away > 0 ? home + away : 1;
-                        const homePercent = Math.round((home/total)*100);
-                        const awayPercent = 100 - homePercent;
-                        return `
-                        <div class="stat-row">
-                            <div class="stat-value" style="color:#ffd700;">${home}</div>
-                            <div class="stat-bar-outer">
-                                <div class="stat-bar-inner">
-                                    <div class="stat-bar-home" style="width:${homePercent}%;"></div>
-                                    <div class="stat-bar-away" style="width:${awayPercent}%;"></div>
-                                </div>
-                            </div>
-                            <div class="stat-value" style="color:#ffd700;">${away}</div>
-                            <div class="stat-label">${label}</div>
-                        </div>
-                        `;
-                    }).join('')
-                }
-                </div>
-                <div class="lineup-section" id="${fixtureId}-lineup" style="display:none;">
-                    <div class="lineup-flex-wrap">
-                        <div class="lineup-big-img">
-                            <img src="${fixture.lineupImg}" alt="Lineup Big" class="lineup-big" />
-                            <div class="lineup-label-on-img">Lineup</div>
-                        </div>
-                        <div class="lineup-events-list">
-                            ${
-                              fixture.events.map(ev => {
-                                const [type, team, minute, arg] = ev;
-                                if(type === "ht" || type === "ft") {
-                                    return `<div class="lineup-event-row" style="justify-content:center; color:#ffd700; font-weight:bold;">
-                                                <span class="lineup-event-minute" style="background:#ffd700; color:#191e33;">${type === "ht" ? "Half Time" : "Full Time"}</span>
-                                                <span style="margin-left:10px;">${arg}</span>
-                                            </div>`;
-                                }
-                                let action = "";
-                                let icon = "";
-                                if(type === "goal") {
-                                    action = "Goal";
-                                }
-                                else if(type === "sub_in") {
-                                    action = "Sub In";
-                                    icon = `<span class="icon-arrow-up"></span>`;
-                                }
-                                else if(type === "sub_out") {
-                                    action = "Sub Out";
-                                    icon = `<span class="icon-arrow-down"></span>`;
-                                }
-                                else {
-                                    action = type.charAt(0).toUpperCase() + type.slice(1);
-                                }
-                                let indicator = '';
-                                if (team === 'home') {
-                                    indicator = `<span class="player-indicator">H</span>`;
-                                } else if (team === 'away') {
-                                    indicator = `<span class="player-indicator away">A</span>`;
-                                }
-                                return `<div class="lineup-event-row">
-                                    <span class="lineup-event-minute">${formatMinute(minute)}</span>
-                                    <span class="lineup-event-action">${action} ${icon}</span>
-                                    <span class="lineup-event-player">${arg || ""}${indicator}</span>
-                                </div>`;
-                              }).join("")
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="score-section">
-                    <div class="score-inner">
-                        Half Time Score: <span class="score-value">${fixture.halfTimeScore}</span>
-                    </div>
-                    <br>
-                    <div class="score-inner">
-                        Full Time Score: <span class="score-value">${fixture.fullTimeScore}</span>
-                    </div>
-                </div>
-                <div class="match-info">
-                    <div class="match-venue">Venue: ${fixture.venue}</div>
-                    <div class="match-possibility-title">Match Possibility</div>
-                    <div class="match-possibility-bar" id="${fixtureId}-possibility-bar">
-                        ${fixture.possibility.map(p=>`<div class="possibility ${p[0]}">${p[1]}</div>`).join("")}
-                    </div>
-                </div>
-            </div>
-        </div>
-        `;
-    }
-    function colorPossibilities() {
-        document.querySelectorAll('[id$="-possibility-bar"]').forEach(bar => {
-            const items = Array.from(bar.children);
-            const percentages = items.map(item => {
-                const match = item.textContent.match(/(\d+)%/);
-                return match ? parseInt(match[1]) : 0;
-            });
-            const sorted = [...percentages].sort((a, b) => b - a);
-            items.forEach((item, idx) => {
-                item.classList.remove('green', 'yellow', 'red');
-                if (percentages[idx] === sorted[0]) {
-                    item.classList.add('green');
-                } else if (percentages[idx] === sorted[1]) {
-                    item.classList.add('yellow');
-                } else {
-                    item.classList.add('red');
-                }
-            });
+        pinForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pin = pinInput.value.trim();
+            if (transactionsByPin[pin]) {
+                currentPin = pin;
+                showHistory(pin);
+            } else {
+                errorMessage.textContent = "Invalid PIN or no transactions found.";
+                errorMessage.style.display = "block";
+            }
         });
-    }
-    function showStats(fixtureId) {
-        document.querySelector(`#${fixtureId}-stats`).style.display = "";
-        document.querySelector(`#${fixtureId}-lineup`).style.display = "none";
-        let block = document.getElementById(fixtureId);
-        block.querySelector('.toggle-btn:nth-child(1)').classList.add("active");
-        block.querySelector('.toggle-btn:nth-child(2)').classList.remove("active");
-    }
-    function showLineup(fixtureId) {
-        document.querySelector(`#${fixtureId}-stats`).style.display = "none";
-        document.querySelector(`#${fixtureId}-lineup`).style.display = "";
-        let block = document.getElementById(fixtureId);
-        block.querySelector('.toggle-btn:nth-child(1)').classList.remove("active");
-        block.querySelector('.toggle-btn:nth-child(2)').classList.add("active");
-    }
-    function togglePlayerStats() {
-        const table = document.getElementById('player-stats-table-root');
-        const btn = document.getElementById('toggle-player-stats-btn');
-        if(table.style.display === 'none') {
-            table.style.display = '';
-            btn.textContent = "Hide Player Stats";
-            btn.setAttribute('aria-expanded', 'true');
-        } else {
-            table.style.display = 'none';
-            btn.textContent = "Show Player Stats";
-            btn.setAttribute('aria-expanded', 'false');
+
+        function showHistory(pin) {
+            loginSection.style.display = "none";
+            historySection.style.display = "block";
+            errorMessage.style.display = "none";
+            historyTableBody.innerHTML = '';
+            transactionsByPin[pin].forEach(tx => {
+                let row = document.createElement('tr');
+                let typeClass = tx.type === "Deposit" ? "deposit" : "withdrawal";
+                row.innerHTML =
+                    `<td>${tx.date}</td>
+                     <td>${tx.type}</td>
+                     <td class="${typeClass}">${NairaSign}${tx.amount}</td>
+                     <td>${tx.description}</td>`;
+                historyTableBody.appendChild(row);
+            });
         }
-    }
-    function toggleFixture(fixtureId) {
-        const block = document.getElementById(`block-${fixtureId}`);
-        const btn = block.querySelector('.fixture-toggle-btn');
-        const content = document.getElementById(`${fixtureId}-content`);
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        if(expanded) {
-            content.style.display = "none";
-            btn.textContent = btn.textContent.replace("Hide", "Show");
-            btn.setAttribute('aria-expanded', 'false');
-        } else {
-            content.style.display = "";
-            btn.textContent = btn.textContent.replace("Show", "Hide");
-            btn.setAttribute('aria-expanded', 'true');
-        }
-    }
-    window.addEventListener('DOMContentLoaded', function() {
-        typeLoadingText(loadingText, document.getElementById('typing-text'), function() {
-            setTimeout(function() {
-                document.getElementById('header-block').style.display = '';
-                // Show updated training info layout
-                document.getElementById('training-days').innerHTML = trainingInfo.days;
-                document.getElementById('training-venue').innerHTML = trainingInfo.venue;
-                document.getElementById('training-time').innerHTML = trainingInfo.time;
-                // Render team staff and show
-                document.getElementById('team-staff-table-root').innerHTML = renderTeamStaff(teamStaff);
-                document.getElementById('team-staff-block').style.display = '';
-                // Render player stats and show
-                document.getElementById('player-stats-table-root').innerHTML = renderPlayerStats(playerStatsArr);
-                document.getElementById('player-stats-block').style.display = '';
-                // Render fixtures
-                let html = "";
-                for(let i=0; i<fixtures.length; ++i) {
-                    html += renderFixture(fixtures[i], i, i===0);
-                }
-                document.getElementById('fixtures-root').innerHTML = html;
-                colorPossibilities();
-                document.getElementById('loading-overlay').style.display = 'none';
-                document.getElementById('fixture-content').style.display = '';
-            }, 400);
+
+        logoutBtn.addEventListener('click', function() {
+            currentPin = null;
+            pinInput.value = '';
+            loginSection.style.display = "block";
+            historySection.style.display = "none";
         });
-    });
+
+        // Optional: Hide error on typing
+        pinInput.addEventListener('input', function(){
+            errorMessage.style.display = "none";
+        });
     </script>
 </body>
 </html>
