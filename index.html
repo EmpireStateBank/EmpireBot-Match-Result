@@ -89,20 +89,18 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.15);
             background: #222;
         }
-        /* Custom scrollbar styles with visible light thumb */
         .history-table-wrapper::-webkit-scrollbar {
             width: 10px;
         }
         .history-table-wrapper::-webkit-scrollbar-thumb {
-            background: #8fe3cf; /* brighter and visible */
+            background: #8fe3cf;
             border-radius: 8px;
             border: 2px solid #222;
         }
         .history-table-wrapper::-webkit-scrollbar-track {
-            background: #222; /* dark track, light thumb */
+            background: #222;
             border-radius: 8px;
         }
-        /* Firefox scrollbar */
         .history-table-wrapper {
             scrollbar-color: #8fe3cf #222;
             scrollbar-width: thin;
@@ -230,48 +228,46 @@
         </div>
     </div>
     <script>
-        // All 11 PINs included, each with example data.
+        // Easier-to-edit PIN arrangement
         const transactionsByPin = {
             "4171": [
-                { date: "2022-08-15", type: "", amount: 12,000, status: "Successful" },
-                { date: "2023-04-10", type: "", amount: 3,000, status: "Pending" }
+                { date: "2022-08-15", type: "Deposit", amount: 12000, status: "Successful" },
+                { date: "2023-04-10", type: "Deposit", amount: 3000, status: "Pending" }
             ],
             "3572": [
-                { date: "2010-01-20", type: "Withdrawal", amount: 4,500, status: "Successful" },
-                { date: "2010-07-05", type: "Withdrawal", amount: 5,000, status: "Successful" },
-                { date: "2015-04-29", type: "Withdrawal", amount: 2,000, status: "Successful" },
-                { date: "2023-12-09", type: "Withdrawal", amount: 30,000, status: "Successful" },
-                { date: "2024-07-23", type: "Withdrawal", amount: 9,000, status: "Successful" },
-                { date: "2024-11-15", type: "Withdrawal", amount: 10,000, status: "Successful" }
+                { date: "2010-01-20", type: "Withdrawal", amount: 4500, status: "Successful" },
+                { date: "2010-07-05", type: "Withdrawal", amount: 5000, status: "Successful" },
+                { date: "2015-04-29", type: "Withdrawal", amount: 2000, status: "Successful" },
+                { date: "2023-12-09", type: "Withdrawal", amount: 30000, status: "Successful" },
+                { date: "2024-07-23", type: "Withdrawal", amount: 9000, status: "Successful" },
+                { date: "2024-11-15", type: "Withdrawal", amount: 10000, status: "Successful" }
             ],
             "4073": [
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 4073 here
             ],
             "1313": [
-                { date: "2025-06-18", type: "Withdrawal", amount: 7,000, status: "Successful" }
+                { date: "2025-06-18", type: "Withdrawal", amount: 7000, status: "Successful" }
             ],
             "5011": [
-                { date: "", type: "", amount: , status: "" },
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 5011 here
             ],
             "8103": [
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 8103 here
             ],
             "5012": [
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 5012 here
             ],
             "1266": [
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 1266 here
             ],
             "1220": [
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 1220 here
             ],
             "2019": [
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 2019 here
             ],
             "1908": [
-                { date: "", type: "", amount: , status: "" },
-                { date: "", type: "", amount: , status: "" }
+                // Add transactions for PIN 1908 here
             ]
         };
 
@@ -306,24 +302,38 @@
             const transactions = transactionsByPin[pin];
             if (!transactions || transactions.length === 0) {
                 let row = document.createElement('tr');
-                row.innerHTML = `<td colspan="4" style="text-align:center;color:#bbb;">No transactions found for this PIN.</td>`;
+                row.innerHTML = `<td colspan="4" style="text-align:center;color:#bbb;">You have made no withdrawal yet.</td>`;
                 historyTableBody.appendChild(row);
                 return;
             }
             transactions.forEach(tx => {
-                let row = document.createElement('tr');
                 let typeClass = tx.type === "Deposit" ? "deposit" : "withdrawal";
                 let statusClass = tx.status === "Successful" ? "status-success" : "status-pending";
                 let statusIcon = tx.status === "Successful"
-                    ? '<span class="icon-success">&#10004;</span>' // check mark
-                    : '<span class="icon-pending">&#9203;</span>'; // hourglass
-                row.innerHTML =
-                    `<td>${tx.date}</td>
-                     <td class="${typeClass}">${tx.type}</td>
-                     <td>${NairaSign}${tx.amount}</td>
-                     <td class="${statusClass}">${statusIcon} ${tx.status}</td>`;
-                historyTableBody.appendChild(row);
+                    ? '<span class="icon-success">&#10004;</span>'
+                    : '<span class="icon-pending">&#9203;</span>';
+                let formattedAmount = typeof tx.amount === "number"
+                    ? tx.amount.toLocaleString('en-NG')
+                    : tx.amount;
+                historyTableBody.appendChild(createTableRow(
+                    tx.date,
+                    tx.type,
+                    NairaSign + formattedAmount,
+                    `${statusIcon} ${tx.status}`,
+                    typeClass,
+                    statusClass
+                ));
             });
+        }
+
+        function createTableRow(date, type, amount, status, typeClass, statusClass) {
+            let row = document.createElement('tr');
+            row.innerHTML =
+                `<td>${date}</td>
+                 <td class="${typeClass}">${type}</td>
+                 <td>${amount}</td>
+                 <td class="${statusClass}">${status}</td>`;
+            return row;
         }
 
         logoutBtn.addEventListener('click', function() {
@@ -333,7 +343,6 @@
             historySection.style.display = "none";
         });
 
-        // Hide error on typing
         pinInput.addEventListener('input', function(){
             errorMessage.style.display = "none";
         });
