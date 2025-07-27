@@ -2,349 +2,165 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Transaction History - PIN Protected</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Check Recent Trade</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600,400&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #111;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(135deg, #141e30, #243b55);
             min-height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .container {
-            max-width: 400px;
-            background: #191919;
-            padding: 34px 22px 28px 22px;
-            border-radius: 20px;
-            box-shadow: 0 7px 32px rgba(0,0,0,0.25);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        h2 {
-            text-align: center;
-            color: #00e676;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin-bottom: 14px;
-        }
-        h3 {
-            color: #fff;
-            text-align: center;
-            font-size: 1.1em;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 9px;
-            color: #8fe3cf;
-            font-size: 1em;
-        }
-        input[type="password"] {
+            background: rgba(34, 49, 63, 0.93);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 18px;
+            max-width: 410px;
             width: 100%;
-            padding: 12px;
-            border: 2px solid #424242;
-            border-radius: 8px;
-            font-size: 18px;
-            background: #111;
-            color: #fff;
-            transition: border 0.2s;
+            text-align: center;
+            position: relative;
         }
-        input[type="password"]:focus {
-            border: 2px solid #00e676;
+        h1 {
+            font-size: 2.1rem;
+            margin-bottom: 0.6rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .recent-trade-label {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #8fd6e7;
+        }
+        .code-list {
+            margin-top: 1.2rem;
+        }
+        .code-box {
+            font-family: 'Fira Mono', monospace;
+            background: #22313f;
+            color: #e9e9e9;
+            font-size: 1.2rem;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            margin: 0.8rem 0 0.3rem 0;
+            position: relative;
+            letter-spacing: 1px;
+            word-break: break-all;
+            user-select: all;
+        }
+        .copy-btn {
+            background: linear-gradient(90deg, #34e0e0 0, #56a9ff 100%);
+            color: #222;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7em 2.4em;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(52,224,224,0.1);
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 0.7em;
             outline: none;
         }
-        input[type="submit"] {
-            width: 100%;
-            padding: 13px;
-            background: linear-gradient(90deg, #00e676 0%, #09c6f9 100%);
-            color: #191919;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-            box-shadow: 0 2px 7px rgba(0,0,0,0.18);
+        .copy-btn:active {
+            background: linear-gradient(90deg, #56a9ff 0, #34e0e0 100%);
         }
-        input[type="submit"]:hover {
-            background: linear-gradient(90deg, #09c6f9 0%, #00e676 100%);
-        }
-        .error {
-            color: #ff5252;
-            margin-bottom: 12px;
-            text-align: center;
-            font-size: 1em;
-        }
-        .history-table-wrapper {
-            max-height: 240px;
-            overflow-y: auto;
-            margin-top: 22px;
-            border-radius: 10px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-            background: #222;
-        }
-        .history-table-wrapper::-webkit-scrollbar {
-            width: 10px;
-        }
-        .history-table-wrapper::-webkit-scrollbar-thumb {
-            background: #8fe3cf;
-            border-radius: 8px;
-            border: 2px solid #222;
-        }
-        .history-table-wrapper::-webkit-scrollbar-track {
-            background: #222;
-            border-radius: 8px;
-        }
-        .history-table-wrapper {
-            scrollbar-color: #8fe3cf #222;
-            scrollbar-width: thin;
-        }
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #222;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .history-table th, .history-table td {
-            border: 1px solid #353535;
-            padding: 10px 6px;
-            text-align: left;
-        }
-        .history-table th {
-            background: #191919;
-            color: #8fe3cf;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            font-weight: 500;
-        }
-        .history-table td {
-            color: #fff;
-            vertical-align: middle;
-        }
-        .history-table tr:nth-child(even) td {
-            background: #181818;
-        }
-        .deposit {
-            color: #00e676;
+        .copied-msg {
+            display: none;
+            color: #81fa8c;
+            font-size: 1rem;
+            margin-bottom: 1em;
             font-weight: 600;
+            animation: fadeIn 0.5s;
         }
-        .withdrawal {
-            color: #ff5252;
-            font-weight: 600;
-        }
-        .status-success {
-            color: #00e676;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .status-pending {
-            color: #ffeb3b;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .icon-success {
-            font-size: 1.1em;
-            color: #00e676;
-        }
-        .icon-pending {
-            font-size: 1.1em;
-            color: #ffeb3b;
-        }
-        .logout-btn {
-            margin-top: 24px;
-            background: linear-gradient(90deg,#ff5252 0%, #b71c1c 100%);
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 7px;
-            font-weight: bold;
-            font-size: 17px;
-            transition: background 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .logout-btn:hover {
-            background: linear-gradient(90deg,#b71c1c 0%, #ff5252 100%);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
         }
         @media (max-width: 500px) {
             .container {
-                max-width: 98vw;
-                padding: 14px 4vw;
+                max-width: 96vw;
+                padding: 1.2rem 0.5rem 1.2rem 0.5rem;
             }
-            .history-table th, .history-table td {
-                font-size: 15px;
-                padding: 7px 3px;
-            }
-            .history-table-wrapper {
-                max-height: 140px;
+            .code-box {
+                font-size: 1rem;
+                padding: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <h2>Transaction History</h2>
-        <div id="login-section">
-            <form id="pin-form">
-                <div class="form-group">
-                    <label for="pin-input">Enter your PIN:</label>
-                    <input type="password" id="pin-input" maxlength="6" required autocomplete="off" />
-                </div>
-                <input type="submit" value="View History" />
-                <div id="error-message" class="error" style="display:none;"></div>
-            </form>
-        </div>
-        <div id="history-section" style="display:none;">
-            <h3>Your Transactions</h3>
-            <div class="history-table-wrapper">
-                <table class="history-table" id="history-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Transactions will be inserted here -->
-                    </tbody>
-                </table>
-            </div>
-            <button class="logout-btn" id="logout-btn">Logout</button>
+    <div class="container">
+        <h1>Check Recent Trade</h1>
+        <div class="recent-trade-label">Recent Trade Codes:</div>
+        <div class="code-list" id="codeList">
+            <!-- Codes will be rendered here -->
         </div>
     </div>
     <script>
-        // Easier-to-edit PIN arrangement
-        const transactionsByPin = {
-            "4171": [
-                { date: "2022-08-15", type: "Deposit", amount: 12000, status: "Successful" },
-                { date: "2023-04-10", type: "Deposit", amount: 3000, status: "Pending" }
-            ],
-            "3572": [
-                { date: "2010-01-20", type: "Withdrawal", amount: 4500, status: "Successful" },
-                { date: "2010-07-05", type: "Withdrawal", amount: 5000, status: "Successful" },
-                { date: "2015-04-29", type: "Withdrawal", amount: 2000, status: "Successful" },
-                { date: "2023-12-09", type: "Withdrawal", amount: 30000, status: "Successful" },
-                { date: "2024-07-23", type: "Withdrawal", amount: 9000, status: "Successful" },
-                { date: "2024-11-15", type: "Withdrawal", amount: 10000, status: "Successful" }
-            ],
-            "4073": [
-                // Add transactions for PIN 4073 here
-            ],
-            "1313": [
-                { date: "2025-06-18", type: "Withdrawal", amount: 7000, status: "Successful" }
-            ],
-            "5011": [
-                // Add transactions for PIN 5011 here
-            ],
-            "8103": [
-                // Add transactions for PIN 8103 here
-            ],
-            "5012": [
-                // Add transactions for PIN 5012 here
-            ],
-            "1266": [
-                // Add transactions for PIN 1266 here
-            ],
-            "1220": [
-                // Add transactions for PIN 1220 here
-            ],
-            "2019": [
-                // Add transactions for PIN 2019 here
-            ],
-            "1908": [
-                // Add transactions for PIN 1908 here
-            ]
-        };
+        // Add your codes here
+        const recentTradeCodes = [
+            "ABCD-1234-EFGH",
+            "WXYZ-5678-IJKL",
+            "MNOP-9101-QRST"
+            // Add more codes as needed
+        ];
 
-        const NairaSign = "\u20A6";
-        const pinForm = document.getElementById('pin-form');
-        const pinInput = document.getElementById('pin-input');
-        const errorMessage = document.getElementById('error-message');
-        const loginSection = document.getElementById('login-section');
-        const historySection = document.getElementById('history-section');
-        const historyTableBody = document.getElementById('history-table').querySelector('tbody');
-        const logoutBtn = document.getElementById('logout-btn');
+        const codeList = document.getElementById('codeList');
 
-        let currentPin = null;
+        recentTradeCodes.forEach((code, idx) => {
+            // Create code box container
+            const codeBox = document.createElement('div');
+            codeBox.className = 'code-box';
+            codeBox.innerText = code;
 
-        pinForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const pin = pinInput.value.trim();
-            if (transactionsByPin.hasOwnProperty(pin)) {
-                currentPin = pin;
-                showHistory(pin);
-            } else {
-                errorMessage.textContent = "Invalid PIN or no transactions found.";
-                errorMessage.style.display = "block";
-            }
-        });
+            // Create copy button
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.innerText = 'Copy Code';
 
-        function showHistory(pin) {
-            loginSection.style.display = "none";
-            historySection.style.display = "block";
-            errorMessage.style.display = "none";
-            historyTableBody.innerHTML = '';
-            const transactions = transactionsByPin[pin];
-            if (!transactions || transactions.length === 0) {
-                let row = document.createElement('tr');
-                row.innerHTML = `<td colspan="4" style="text-align:center;color:#bbb;">You have made no withdrawal yet.</td>`;
-                historyTableBody.appendChild(row);
-                return;
-            }
-            transactions.forEach(tx => {
-                let typeClass = tx.type === "Deposit" ? "deposit" : "withdrawal";
-                let statusClass = tx.status === "Successful" ? "status-success" : "status-pending";
-                let statusIcon = tx.status === "Successful"
-                    ? '<span class="icon-success">&#10004;</span>'
-                    : '<span class="icon-pending">&#9203;</span>';
-                let formattedAmount = typeof tx.amount === "number"
-                    ? tx.amount.toLocaleString('en-NG')
-                    : tx.amount;
-                historyTableBody.appendChild(createTableRow(
-                    tx.date,
-                    tx.type,
-                    NairaSign + formattedAmount,
-                    `${statusIcon} ${tx.status}`,
-                    typeClass,
-                    statusClass
-                ));
+            // Create copied message
+            const copiedMsg = document.createElement('div');
+            copiedMsg.className = 'copied-msg';
+            copiedMsg.innerText = 'Code copied! Redirecting...';
+
+            // Copy logic
+            copyBtn.addEventListener('click', () => {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(code)
+                        .then(() => {
+                            copiedMsg.style.display = 'block';
+                            copyBtn.disabled = true;
+                            setTimeout(() => {
+                                window.location.href = "https://www.sportybet.com/ng/m/verify_bet";
+                            }, 1200);
+                        });
+                } else {
+                    // Fallback for older browsers
+                    const textarea = document.createElement('textarea');
+                    textarea.value = code;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    copiedMsg.style.display = 'block';
+                    copyBtn.disabled = true;
+                    setTimeout(() => {
+                        window.location.href = "https://www.sportybet.com/ng/m/verify_bet";
+                    }, 1200);
+                }
             });
-        }
 
-        function createTableRow(date, type, amount, status, typeClass, statusClass) {
-            let row = document.createElement('tr');
-            row.innerHTML =
-                `<td>${date}</td>
-                 <td class="${typeClass}">${type}</td>
-                 <td>${amount}</td>
-                 <td class="${statusClass}">${status}</td>`;
-            return row;
-        }
-
-        logoutBtn.addEventListener('click', function() {
-            currentPin = null;
-            pinInput.value = '';
-            loginSection.style.display = "block";
-            historySection.style.display = "none";
-        });
-
-        pinInput.addEventListener('input', function(){
-            errorMessage.style.display = "none";
+            // Append elements
+            codeList.appendChild(codeBox);
+            codeList.appendChild(copyBtn);
+            codeList.appendChild(copiedMsg);
         });
     </script>
 </body>
