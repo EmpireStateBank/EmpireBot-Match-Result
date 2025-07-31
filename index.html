@@ -293,20 +293,55 @@
       // Add more fixtures as needed
     ];
 
+    // Enhanced trade status logic: checks if prediction matches result, not just over/under
     function getTradeStatus(tip, score) {
       tip = tip.trim().toUpperCase();
       if (!score || score === "") return { text: "", status: "loading" };
       const g = score.split('-');
       if (g.length !== 2) return { text: "", status: "loading" };
-      const totalGoals = parseInt(g[0].trim(), 10) + parseInt(g[1].trim(), 10);
-      if (tip.startsWith("OV2.5")) {
+      const home = parseInt(g[0].trim(), 10);
+      const away = parseInt(g[1].trim(), 10);
+      const totalGoals = home + away;
+
+      // Home win
+      if (tip.startsWith("HOME")) {
+        if (home > away) return { text: "Trade Won", status: "won" };
+        else return { text: "Trade Lost", status: "lost" };
+      }
+      // Draw
+      if (tip.startsWith("DRAW")) {
+        if (home === away) return { text: "Trade Won", status: "won" };
+        else return { text: "Trade Lost", status: "lost" };
+      }
+      // Away win
+      if (tip.startsWith("AWAY")) {
+        if (away > home) return { text: "Trade Won", status: "won" };
+        else return { text: "Trade Lost", status: "lost" };
+      }
+      // Over 2.5
+      if (tip.startsWith("OV2.5") || tip.startsWith("OVER 2.5")) {
         if (totalGoals > 2.5) return { text: "Trade Won", status: "won" };
         else return { text: "Trade Lost", status: "lost" };
       }
-      if (tip.startsWith("UN2.5")) {
+      // Under 2.5
+      if (tip.startsWith("UN2.5") || tip.startsWith("UNDER 2.5")) {
         if (totalGoals < 2.5) return { text: "Trade Won", status: "won" };
         else return { text: "Trade Lost", status: "lost" };
       }
+      // GG (Both teams to score)
+      if (tip === "GG" || tip === "BOTH TEAMS TO SCORE") {
+        if (home > 0 && away > 0) return { text: "Trade Won", status: "won" };
+        else return { text: "Trade Lost", status: "lost" };
+      }
+      // NG (No goal - at least one team has 0)
+      if (tip === "NG" || tip === "NO GOAL") {
+        if (home === 0 || away === 0) return { text: "Trade Won", status: "won" };
+        else return { text: "Trade Lost", status: "lost" };
+      }
+
+      // Add more prediction types if needed
+
+      // If prediction type not recognized
       return { text: "Unknown Tip", status: "unknown" };
     }
 
