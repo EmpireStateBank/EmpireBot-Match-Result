@@ -1,414 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>EmpireBot Match Result</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #0d0d0d;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      color: #f0f0f0;
-      box-sizing: border-box;
-    }
-    /* MAIN PAGE LOADER */
-    .main-loader-bg {
-      position: fixed;
-      top:0; left:0; right:0; bottom:0;
-      background: #222a36e6;
-      z-index: 5000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      min-height: 100vh;
-      min-width: 100vw;
-      transition: opacity 0.5s;
-    }
-    .main-loader-bg.hide {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s;
-    }
-    .main-loader-circle {
-      width: 75px;
-      height: 75px;
-      margin: 0 auto 24px auto;
-      border: 8px solid #5b3fd7;
-      border-top: 8px solid #1bd741;
-      border-radius: 50%;
-      animation: spinloader 1.1s linear infinite;
-      box-shadow: 0 4px 18px #5b3fd780;
-    }
-    @keyframes spinloader {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-    .main-loader-text {
-      color: #fff;
-      font-size: 1.32em;
-      font-family: 'Consolas', monospace;
-      font-weight: 700;
-      letter-spacing: 2px;
-      min-height: 1.4em;
-      text-shadow: 0 1px 0 #7a6cf5;
-      text-align: center;
-      margin-top: 8px;
-      margin-bottom: 2px;
-      animation: typing 1.5s steps(24, end) infinite;
-    }
-    @keyframes typing {
-      from { opacity: 0.2; }
-      to { opacity: 1; }
-    }
-    .container {
-      max-width: 860px;
-      margin: 50px auto 0 auto;
-      background: #161616;
-      border-radius: 24px;
-      box-shadow: 0 10px 38px rgba(0,0,0,0.38);
-      padding: 48px 40px 40px 40px;
-      min-height: 330px;
-      position: relative;
-      animation: fadeIn 0.7s;
-      display: none;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    h1 {
-      text-align: center;
-      color: #2dfc9a;
-      letter-spacing: 2px;
-      font-weight: 800;
-      font-size: 2.4em;
-      margin-bottom: 44px;
-      margin-top: 0;
-      text-shadow: 0 2px 8px #121212;
-    }
-    .fixture-block {
-      margin-bottom: 56px;
-      border-bottom: 1px solid #212121;
-      padding-bottom: 36px;
-      background: linear-gradient(90deg, #232323 60%, #191919 100%);
-      border-radius: 18px;
-      box-shadow: 0 2px 14px #121212;
-      transition: box-shadow 0.2s;
-      position: relative;
-    }
-    .fixture-block:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-    }
-    .fixture-header {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 24px;
-      font-size: 1.18em;
-      font-weight: 700;
-      color: #2dfc9a;
-      margin-bottom: 12px;
-      background: #111;
-      border-radius: 9px;
-      padding: 10px 18px;
-      box-shadow: 0 1px 10px #161616;
-      letter-spacing: 1px;
-      text-shadow: 0 1px 0 #0b0b0b;
-    }
-    .fixture-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 24px;
-      margin-bottom: 13px;
-      font-size: 1.22em;
-      font-weight: 600;
-      color: #e0ffe7;
-      letter-spacing: 0.2px;
-    }
-    .team-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 160px;
-    }
-    .team-name {
-      font-size: 1.26em;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 2px;
-      letter-spacing: 0.3px;
-      text-shadow: 0 2px 8px #101a13;
-      padding: 2px 0;
-    }
-    .tip-label {
-      font-size: 1.1em;
-      font-weight: 700;
-      color: #0d0d0d;
-      background: linear-gradient(90deg, #2dfc9a 0%, #13c685 100%);
-      border-radius: 14px;
-      padding: 6px 22px;
-      margin-top: 9px;
-      letter-spacing: 1px;
-      box-shadow: 0 2px 12px #0d3020;
-      border: none;
-      display: inline-block;
-    }
-    .vs-block {
-      font-size: 1.23em;
-      font-weight: 800;
-      color: #2dfc9a;
-      margin: 0 14px;
-      letter-spacing: 3px;
-      text-shadow: 0 1px 0 #101010;
-    }
-    .score {
-      font-size: 2.29em;
-      margin-bottom: 24px;
-      text-align: center;
-      font-weight: bold;
-      color: #2dfc9a;
-      letter-spacing: 4px;
-      font-family: 'Courier New', Courier, monospace;
-      text-shadow: 0 1px 0 #222;
-    }
-    .trade-status {
-      text-align:center;
-      margin:16px 0 8px 0;
-      font-size:1.28em;
-      font-weight:800;
-      color:#13c685;
-      letter-spacing: 1px;
-      background: #111c18;
-      border-radius: 8px;
-      padding: 8px 0;
-      box-shadow: 0 1px 10px #182a22;
-      min-height: 1.2em;
-    }
-    .trade-status.loading {
-      color: #fff;
-      background: transparent;
-      box-shadow: none;
-      padding: 0;
-      min-height: 90px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .trade-status.lost {
-      color: #ff5757;
-      background: #1e1010;
-      box-shadow: 0 1px 10px #331010;
-    }
-    .trade-status.unknown {
-      color: #f7e94a;
-      background: #2a2a11;
-      box-shadow: 0 1px 10px #3d3d1a;
-    }
-    /* Loader spinner for fixture status */
-    .loader-spinner {
-      margin: 0 auto 10px auto;
-      width: 60px;
-      height: 60px;
-      border: 7px solid #181818;
-      border-top: 7px solid #2dfc9a;
-      border-radius: 50%;
-      animation: spinloader 1.1s linear infinite;
-      box-shadow: 0 2px 16px #2dfc9a33;
-      display: block;
-    }
-    .loader-label {
-      color: #fff;
-      font-size: 1.02em;
-      font-family: 'Consolas', monospace;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-align: center;
-      margin-top: 12px;
-      margin-bottom: 2px;
-      text-shadow: 0 1px 0 #2dfc9a;
-      animation: typing 2.2s steps(24, end) infinite;
-    }
-    @media (max-width: 900px) {
-      .container { max-width: 99vw; padding: 18px 4vw 24px 4vw;}
-      .fixture-row { flex-direction: column; gap: 6px; }
-      .team-block { min-width: unset; }
-      .fixture-header { flex-direction: column; gap: 8px; }
-      .score { font-size: 1.5em; }
-    }
-    @media (max-width: 600px) {
-      h1 { font-size: 1.2em; }
-      .fixture-header, .trade-status, .score { font-size: 1em; }
-      .tip-label { padding: 4px 12px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>EmpireBot-Trade-Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: linear-gradient(135deg, #212a36 0%, #1c2331 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .container {
+            background: rgba(34, 42, 54, 0.97);
+            box-shadow: 0 8px 32px 0 rgba(30, 40, 60, 0.2);
+            border-radius: 18px;
+            padding: 36px 24px 24px 24px;
+            min-width: 340px;
+            max-width: 440px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .loader-wrapper {
+            width: 100%;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .loader-img {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .loader-img img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: funky-rotate 1.6s linear infinite;
+        }
+        @keyframes funky-rotate {
+            0% { transform: rotate(0deg) scale(1) skew(0deg, 0deg); filter: brightness(1);}
+            10% { transform: rotate(36deg) scale(1.08) skew(2deg, 4deg);}
+            25% { transform: rotate(90deg) scale(1.13) skew(-2deg, 0deg); filter: brightness(1.05);}
+            40% { transform: rotate(144deg) scale(1.07) skew(-6deg, 5deg);}
+            60% { transform: rotate(216deg) scale(1.12) skew(5deg, -2deg); filter: brightness(0.95);}
+            75% { transform: rotate(270deg) scale(1.18) skew(-2deg, 2deg);}
+            90% { transform: rotate(324deg) scale(1.08) skew(2deg, -3deg); filter: brightness(1.1);}
+            100% { transform: rotate(360deg) scale(1) skew(0deg, 0deg); filter: brightness(1);}
+        }
+        .blinking-note {
+            font-size: 1.08rem;
+            color: #00d08c;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: blink 1s steps(1, start) 4;
+            margin-bottom: 0;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Improved Card Style */
+        .result-card {
+            margin-top: 0;
+            width: 100%;
+            background: #232e43;
+            border-radius: 15px;
+            box-shadow: 0 3px 16px 0 rgba(0,0,0,0.08);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-height: 340px;
+            /* Only this box will scroll */
+            overflow: hidden;
+        }
+        .card-header {
+            width: 100%;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #00d08c;
+            background: #1b232e;
+            padding: 14px 0 12px 0;
+            border-radius: 15px 15px 0 0;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .header-img {
+            width: 26px;
+            height: 26px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 7px;
+        }
+        .header-img img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: funky-rotate 1.6s linear infinite;
+        }
+        .card-content-scroll {
+            width: 100%;
+            padding: 0 0 18px 0;
+            box-sizing: border-box;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .match-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 18px 0 12px 0;
+        }
+        .match-row {
+            background: rgba(43, 53, 71, 0.95);
+            border-radius: 8px;
+            padding: 10px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 8px 0 rgba(0,0,0,0.07);
+        }
+        .teams {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 118px;
+        }
+        .team-names {
+            font-weight: 600;
+            color: #ffd600;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .tip-label {
+            font-size: 0.94rem;
+            color: #91e7c1;
+            font-style: italic;
+            margin-bottom: 2px;
+        }
+        .score-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 77px;
+        }
+        .score {
+            font-size: 1.12rem;
+            font-weight: bold;
+            background: #212a36;
+            color: #00d08c;
+            border-radius: 6px;
+            padding: 4px 14px;
+            margin-bottom: 2px;
+        }
+        .status {
+            font-size: 1.01rem;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 7px;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+        .status-win {
+            background: #073c2e;
+            color: #00d08c;
+            border: 1.5px solid #00d08c;
+        }
+        .status-loss {
+            background: #3c071e;
+            color: #f44336;
+            border: 1.5px solid #f44336;
+        }
+
+        .trade-result-label {
+            margin: 10px 0 0 0;
+            font-weight: bold;
+            font-size: 1.14rem;
+            padding: 10px 18px;
+            border-radius: 8px;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+        .trade-result-won {
+            background: #073c2e;
+            color: #00d08c;
+            border: 2px solid #00d08c;
+        }
+        .trade-result-lost {
+            background: #3c071e;
+            color: #f44336;
+            border: 2px solid #f44336;
+        }
+        /* Custom scrollbar for card-content-scroll */
+        .card-content-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .card-content-scroll::-webkit-scrollbar-thumb {
+            background: #2e3d54;
+            border-radius: 6px;
+        }
+        .card-content-scroll::-webkit-scrollbar-track {
+            background: #273143;
+        }
+        .card-content-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #2e3d54 #273143;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px 0;
+                min-width: 0;
+                max-width: 99vw;
+            }
+            .result-card {
+                max-height: 220px;
+                padding: 0;
+            }
+            .card-header {
+                font-size: 1.07rem;
+                padding: 10px 0 8px 0;
+            }
+            .card-content-scroll {
+                max-height: 140px;
+                padding: 0 0 12px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Initial page loader: original format -->
-  <div class="main-loader-bg" id="mainLoader">
-    <div class="main-loader-circle"></div>
-    <div class="main-loader-text" id="mainLoaderText"></div>
-  </div>
-  <div class="container" id="mainContent">
-    <h1>EmpireBet Match Result</h1>
-    <div id="matches"></div>
-  </div>
-  <script>
-    // === Fixture Data: { fixtureId, teamA, teamB, tip, score } ===
-    const matches = [
-      {
-        fixtureId: "EmpireBot>2560",
-        teamA: "Searching",
-        teamB: "Searching",
-        tip: "OV2.5 1.60",
-        score: ""
-      },
-      {
-        fixtureId: "EmpireBot>6590",
-        teamA: "Searching",
-        teamB: "Searching",
-        tip: "Home 1.50",
-        score: ""
-      },
-      {
-        fixtureId: "EmpireBot>01613",
-        teamA: "Searching",
-        teamB: "Searching",
-        tip: "NG 1.70",
-        score: ""
-      },
-      {
-        fixtureId: "EmpireBot>1991",
-        teamA: "Searching",
-        teamB: "Searching",
-        tip: "Draw 2.15",
-        score: "" // No score yet
-      }
-      // Add more fixtures as needed
-    ];
-
-    // Enhanced trade status logic: checks if prediction matches result, not just over/under
-    function getTradeStatus(tip, score) {
-      tip = tip.trim().toUpperCase();
-      if (!score || score === "") return { text: "", status: "loading" };
-      const g = score.split('-');
-      if (g.length !== 2) return { text: "", status: "loading" };
-      const home = parseInt(g[0].trim(), 10);
-      const away = parseInt(g[1].trim(), 10);
-      const totalGoals = home + away;
-
-      // Home win
-      if (tip.startsWith("HOME")) {
-        if (home > away) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-      // Draw
-      if (tip.startsWith("DRAW")) {
-        if (home === away) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-      // Away win
-      if (tip.startsWith("AWAY")) {
-        if (away > home) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-      // Over 2.5
-      if (tip.startsWith("OV2.5") || tip.startsWith("OVER 2.5")) {
-        if (totalGoals > 2.5) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-      // Under 2.5
-      if (tip.startsWith("UN2.5") || tip.startsWith("UNDER 2.5")) {
-        if (totalGoals < 2.5) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-      // GG (Both teams to score)
-      if (tip === "GG" || tip === "BOTH TEAMS TO SCORE") {
-        if (home > 0 && away > 0) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-      // NG (No goal - at least one team has 0)
-      if (tip === "NG" || tip === "NO GOAL") {
-        if (home === 0 || away === 0) return { text: "Trade Won", status: "won" };
-        else return { text: "Trade Lost", status: "lost" };
-      }
-
-      // Add more prediction types if needed
-
-      // If prediction type not recognized
-      return { text: "Unknown Tip", status: "unknown" };
-    }
-
-    function renderMatches() {
-      const matchesDiv = document.getElementById('matches');
-      matchesDiv.innerHTML = '';
-      matches.forEach((m, idx) => {
-        const statusObj = getTradeStatus(m.tip, m.score);
-        matchesDiv.innerHTML += `
-          <div class="fixture-block" id="fixture-block-${idx}">
-            <div class="fixture-header">
-              <span>Fixture ID: <b>${m.fixtureId}</b></span>
+    <div class="container">
+        <!-- Initial Loader (on page load) -->
+        <div id="loader" class="loader-wrapper">
+            <div class="loader-img">
+                <!-- Animated image -->
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="EmpireBot Logo" />
             </div>
-            <div class="fixture-row">
-              <div class="team-block">
-                <span class="team-name">${m.teamA}</span>
-              </div>
-              <span class="vs-block">VS</span>
-              <div class="team-block">
-                <span class="team-name">${m.teamB}</span>
-              </div>
+            <div class="blinking-note">Loading Last Result</div>
+        </div>
+        <!-- Main Content: Card Box -->
+        <div id="mainContent" style="display:none; width:100%;">
+            <div class="result-card">
+                <div class="card-header">
+                    <span class="header-img">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="EmpireBot Logo">
+                    </span>
+                    EmpireBot &gt; 453
+                </div>
+                <div class="card-content-scroll">
+                    <div class="match-list" id="matchList">
+                        <!-- Match rows are injected here -->
+                    </div>
+                    <div id="tradeResultLabel" class="trade-result-label">Trade Result: Won</div>
+                </div>
             </div>
-            <div style="text-align:center;">
-              <span class="tip-label">${m.tip.split(' ')[0]} <span style="color:#0d0d0d;font-weight:800;">${m.tip.split(' ')[1] || ''}</span></span>
-            </div>
-            <div class="score">${m.score ? m.score : '<span style="color:#888;">No score yet</span>'}</div>
-            <div class="trade-status ${statusObj.status}">
-              ${statusObj.status === "loading" ? `
-                <span class="loader-spinner"></span>
-                <span class="loader-label">Loading Result, check back later...</span>
-              ` : statusObj.text}
-            </div>
-          </div>
-        `;
-      });
-    }
+        </div>
+    </div>
+    <script>
+        // ====== Editable Data Section =======
+        const fixtureData = {
+            header: "EmpireBot > 453",
+            teams: [
+                { teamA: "Dragons FC", teamB: "Tigers United", tip: "Over 2.5 Goals", scoreA: 2, scoreB: 3, status: "win" },
+                { teamA: "Lions Club", teamB: "Eagles", tip: "Under 2.5 Goals", scoreA: 0, scoreB: 1, status: "loss" },
+                { teamA: "Wolves", teamB: "Panthers", tip: "Both Teams To Score", scoreA: 1, scoreB: 1, status: "win" },
+                { teamA: "Sharks", teamB: "Bulls", tip: "Home Win", scoreA: 2, scoreB: 0, status: "win" },
+                { teamA: "Falcons", teamB: "Hawks", tip: "Draw", scoreA: 3, scoreB: 3, status: "loss" }
+            ]
+        };
+        // Trade result: "won" or "lost"
+        const tradeResult = "";
 
-    // Main loader logic (original style)
-    function runMainLoader(cb) {
-      const loaderBg = document.getElementById('mainLoader');
-      const loaderText = document.getElementById('mainLoaderText');
-      let count = 0, max = 4;
-      function loop() {
-        if (count < max) {
-          loaderText.textContent = "Loading Results";
-          setTimeout(() => {
-            loaderText.textContent = "";
-            setTimeout(() => {
-              count++;
-              loop();
-            }, 250);
-          }, 700);
-        } else {
-          loaderBg.classList.add('hide');
-          setTimeout(() => {
-            loaderBg.style.display = "none";
-            document.getElementById('mainContent').style.display = "block";
-            cb();
-          }, 400);
+        // ====== Loader simulation =======
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                renderMatches();
+                renderTradeResult();
+            }, 1800); // Loader duration in ms
+        });
+
+        // ====== Render functions =======
+        function renderMatches() {
+            const matchList = document.getElementById('matchList');
+            matchList.innerHTML = "";
+            fixtureData.teams.forEach(team => {
+                const div = document.createElement('div');
+                div.className = "match-row";
+                div.innerHTML = `
+                    <div class="teams">
+                        <div class="team-names">${team.teamA} <span style="color:#ccc;font-size:.95em;">vs</span> ${team.teamB}</div>
+                        <div class="tip-label">${team.tip}</div>
+                    </div>
+                    <div class="score-block">
+                        <div class="score">${team.scoreA} <span style="color:#ffd600">:</span> ${team.scoreB}</div>
+                        <div class="status ${team.status === "win" ? "status-win" : "status-loss"}">
+                            ${team.status === "win"
+                                ? '&#10003; Win'
+                                : '&#10007; Loss'
+                            }
+                        </div>
+                    </div>
+                `;
+                matchList.appendChild(div);
+            });
         }
-      }
-      loop();
-    }
 
-    window.onload = function() {
-      runMainLoader(renderMatches);
-    }
-  </script>
+        function renderTradeResult() {
+            const resultLabel = document.getElementById('tradeResultLabel');
+            if (tradeResult === "won") {
+                resultLabel.textContent = "Trade Result: Won";
+                resultLabel.className = "trade-result-label trade-result-won";
+            } else {
+                resultLabel.textContent = "Trade Result: Lost";
+                resultLabel.className = "trade-result-label trade-result-lost";
+            }
+        }
+
+        // ====== Manual Edit Instructions =======
+        // - To edit teams, scores, tips, status: Change fixtureData.teams
+        // - To edit trade result: Change tradeResult ("won"/"lost")
+        // - To change loader image, use a different image src in <img>
+    </script>
 </body>
 </html>
